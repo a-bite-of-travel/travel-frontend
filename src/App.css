@@ -1,19 +1,25 @@
 *{padding:0;margin:0;}
 body{color:#333}
-header{padding:10px 0;border: 1px solid #d8d8d8;}
+
+/* header */
+header{padding:10px 0;border-bottom: 1px solid #d8d8d8;}
 header .nav{margin-right: 80px;}
-header *{font-family: "Noto Sans KR", sans-serif !important; }
+header *{font-family: "Noto Sans KR", sans-serif !important; };
 header .MuiAvatar-root{border-bottom:1px solid #d8d8d8;margin-right:10px}
 
-
-/*layer*/
-.customLayer01 h2{background-color: #0082FF;color:#fff}
-.customLayer01 h2 button{color:#fff;position:absolute;right:0px;top:10px}
-.customLayer01 .MuiDialogContent-root{padding:15px}
-.customLayer01 .MuiDialogActions-root{padding:15px}
-
-
-
 #container{padding:25px}
+
+/* footer */
+footer{background-color:#333;color:#fff;font-family:"Baloo Bhai 2", sans-serif;font-size: 15px;text-align: center;padding:5.5px 0;}
+
+/* button */
 button{font-family: "Noto Sans KR", sans-serif !important;}
-footer{background-color:#333;color:#fff;font-family: "Baloo Bhai 2", sans-serif;font-size: 15px;text-align: center;padding:5.5px 0;}
+
+/* layer */
+.customLayer01 *{font-family: "Noto Sans KR", sans-serif}
+.customLayer01 h2{background-color: #0082FF;color:#fff}
+.customLayer01 h2 button{color:#fff;font-size:18px;position:absolute;right:0px;top:10px;transform: scaleY(0.7);}
+
+.customLayer01 .MuiDialogContent-root{padding:20px !important}
+.customLayer01 .MuiDialogActions-root{padding:0px 0 20px}
+
