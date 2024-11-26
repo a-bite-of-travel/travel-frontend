@@ -1,5 +1,5 @@
 export default function Footer() {
     return (
-        <div>footer</div>
+        <footer>Copyrightⓒ Ssoul Road Corp. All rights reserved.</footer>
     );
 }
