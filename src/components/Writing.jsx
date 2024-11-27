@@ -61,6 +61,34 @@ export default function Writing() {
         }
     };
 
+    /*const handleImageUpload = () => {
+        const input = document.createElement("input");
+        input.setAttribute("type", "file");
+        input.setAttribute("accept", "image/*");
+        input.click();
+
+        input.onchange = async () => {
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append("image", file);
+
+            try {
+                // 이미지 업로드 API 호출
+                const response = await fetch("https://api.example.com/upload", {
+                    method: "POST",
+                    body: formData,
+                });
+                const data = await response.json();
+
+                const quill = quillRef.current.getEditor(); // Quill 인스턴스 가져오기
+                const range = quill.getSelection(); // 현재 커서 위치 가져오기
+                quill.insertEmbed(range.index, "image", data.url); // 이미지 삽입
+            } catch (error) {
+                console.error("Failed to upload image", error);
+            }
+        };
+    };*/
+
     const modules = {
         toolbar: {
             container: [
@@ -69,6 +97,9 @@ export default function Writing() {
                 [{ list: "ordered" }, { list: "bullet" }],
                 ["link", "image"], // 이미지 버튼 추가
             ],
+            /*handlers: {
+                image: handleImageUpload, // 사용자 정의 이미지 업로드 핸들러
+            },*/
         },
     };
 
