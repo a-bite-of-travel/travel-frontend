@@ -1,41 +1,151 @@
-import * as React from 'react';
-import { Stack, Container, Button, FormControl, FormControlLabel, FormLabel, Select, TextField, MenuItem, FormHelperText, Dialog, DialogTitle, DialogContent, DialogContentText, Box, DialogActions } from '@mui/material';
+import React, { useState, useRef } from "react";
+import { Container, FormControl, FormLabel, Select, MenuItem, TextField, Button } from "@mui/material";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 export default function Writing() {
-    /* select */
-    const [reviewType, setReviewType] = React.useState('10');
+    /* State */
+    const [status, setStatus] = useState("ty1");
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [tags, setTags] = useState("");
+    const [errors, setErrors] = useState({});
+    const quillRef = useRef(null);
 
-    const handleChange = (event) => {
-        setReviewType(event.target.value);
+    /* Handlers */
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        // 폼 검증
+        const validationErrors = {};
+        if (!title) validationErrors.title = "제목을 입력해주세요.";
+        if (!content) validationErrors.content = "내용을 입력해주세요.";
+        if (!tags) validationErrors.tags = "태그를 입력해주세요.";
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
+        const reviewData = {
+            type: status,
+            title,
+            content,
+            tags: tags.split(",").map(tag => tag.trim()), // 태그 배열로 변환
+        };
+
+        console.log("Submitted Data:", reviewData);
+
+        try {
+            // API 호출 (예시)
+            const response = await fetch("http://localhost:3500", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(reviewData),
+            });
+            if (response.ok) {
+                alert("리뷰가 성공적으로 제출되었습니다!");
+                // 상태 초기화
+                setStatus("ty1");
+                setTitle("");
+                setContent("");
+                setTags("");
+                setErrors({});
+            } else {
+                alert("리뷰 제출에 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("Error submitting review:", error);
+            alert("서버와 통신 중 문제가 발생했습니다.");
+        }
     };
+
+    const modules = {
+        toolbar: {
+            container: [
+                [{ header: [1, 2, false] }],
+                ["bold", "italic", "underline"],
+                [{ list: "ordered" }, { list: "bullet" }],
+                ["link", "image"], // 이미지 버튼 추가
+            ],
+        },
+    };
+
+    const formats = [
+        "header",
+        "bold",
+        "italic",
+        "underline",
+        "list",
+        "bullet",
+        "link",
+        "image",
+    ]
 
     return (
         <Container maxWidth="lg">
-            <div className="writing_area">
-                <FormControl>
-                    <FormLabel id="review-select-label">리뷰선택</FormLabel>
+            <form onSubmit={handleSubmit} className="writing_area">
+                {/* 리뷰 선택 */}
+                <FormControl fullWidth margin="normal">
+                    <FormLabel htmlFor="review-select">리뷰 선택</FormLabel>
                     <Select
-                        labelId="review-select-label"
                         id="review-select"
-                        value={reviewType}
-                        onChange={handleChange}>
-                        <MenuItem value={10}>여행지</MenuItem>
-                        <MenuItem value={20}>음식점</MenuItem>
-                        <MenuItem value={30}>리뷰</MenuItem>
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                    >
+                        <MenuItem value="ty1">여행지</MenuItem>
+                        <MenuItem value="ty2">음식점</MenuItem>
+                        <MenuItem value="ty3">축제</MenuItem>
                     </Select>
                 </FormControl>
-                <FormControl>
-                    <FormLabel id="revie-input-label1">제목</FormLabel>
-                    <TextField labelId="revie-input-label1" id="review-input1" placeholder="내용을 입력해주세요." />
+
+                {/* 제목 입력 */}
+                <FormControl fullWidth margin="normal" error={!!errors.title}>
+                    <FormLabel htmlFor="review-title">제목</FormLabel>
+                    <TextField
+                        id="review-title"
+                        placeholder="제목을 입력해주세요."
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        helperText={errors.title}
+                    />
                 </FormControl>
-                <FormControl>
-                    <FormLabel id="">내용</FormLabel>
+
+                {/* 내용 입력 */}
+                <FormControl fullWidth margin="normal" error={!!errors.content}>
+                    <FormLabel htmlFor="review-content">내용</FormLabel>
+                    <ReactQuill
+                        ref={quillRef}
+                        theme="snow"
+                        value={content}
+                        onChange={setContent}
+                        modules={modules}
+                        formats={formats}
+                        placeholder="내용을 입력하세요."
+                    />
+                    {errors.content && <p style={{ color: "red" }}>{errors.content}</p>}
                 </FormControl>
-                <FormControl>
-                    <FormLabel id="revie-input-label2">태그달기</FormLabel>
-                    <TextField labelId="revie-input-label2" id="review-input2" placeholder="태그를 입력해주세요." />
+
+                {/* 태그 입력 */}
+                <FormControl fullWidth margin="normal" error={!!errors.tags}>
+                    <FormLabel htmlFor="review-tags">태그 달기</FormLabel>
+                    <TextField
+                        id="review-tags"
+                        placeholder="태그를 쉼표로 구분하여 입력해주세요."
+                        value={tags}
+                        onChange={(e) => setTags(e.target.value)}
+                        helperText={errors.tags}
+                    />
                 </FormControl>
-            </div>
+
+                {/* 제출 버튼 */}
+                <div className="btn_area">
+                    <Button variant="contained" color="primary" type="submit">
+                        제출
+                    </Button>
+                </div>
+            </form>
         </Container>
     );
 }
