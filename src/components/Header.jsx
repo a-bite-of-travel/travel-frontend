@@ -1,7 +1,19 @@
-import { Stack, Container, Button, Grid, Avatar, Typography, Link } from '@mui/material'
+import { Stack, Container, Button, Grid, Avatar, Typography, Link, Menu, MenuItem } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom';
+import { useState } from 'react'
 
 export default function Header() {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleMenuClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <>
             <header>
@@ -13,8 +25,43 @@ export default function Header() {
                         <Grid item sx={{ display: 'flex', alignItems: 'center' }} className="nav">
                             <Stack spacing={10} direction="row">
                                 <Link component={RouterLink} to="/" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>여행계획</b></Link>
-                                <Link component={RouterLink} to="/" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>여행정보</b></Link>
-                                <Link component={RouterLink} to="/guide" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>Guide</b></Link>       
+                                <Link
+                                    color="inherit"
+                                    underline="none"
+                                    sx={{ '&:hover': { color: 'primary.main' }, cursor: 'pointer' }}
+                                    onClick={handleMenuClick}
+                                >
+                                    <b>여행정보</b>
+                                </Link>
+                                <Menu
+                                    anchorEl={anchorEl}
+                                    open={open}
+                                    onClose={handleMenuClose}
+                                    anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'left',
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'left',
+                                    }}
+                                    disableAutoFocusItem
+                                    disableRestoreFocus
+                                >
+                                    <MenuItem onClick={handleMenuClose} component={RouterLink} to="/tour">
+                                        여행지
+                                    </MenuItem>
+                                    <MenuItem onClick={handleMenuClose} component={RouterLink} to="/food">
+                                        음식점
+                                    </MenuItem>
+                                    <MenuItem onClick={handleMenuClose} component={RouterLink} to="/festival">
+                                        축제
+                                    </MenuItem>
+                                    <MenuItem onClick={handleMenuClose} component={RouterLink} to="/review">
+                                        후기 작성
+                                    </MenuItem>
+                                </Menu>
+                                <Link component={RouterLink} to="/guide" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>Guide</b></Link>
                             </Stack>
                         </Grid>
                         <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
