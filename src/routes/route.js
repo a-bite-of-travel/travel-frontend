@@ -3,7 +3,10 @@ import RouterLayout from './RouterLayout';
 import Main from './Main';
 import Guide from '../components/Guide';
 import Review from '../routes/Review'
-import TourInfo, {loader as tourInfoLoader } from './TourInfo';
+import TourInfo, { loader as tourInfoLoader } from './TourInfo';
+import Dining from './dining';
+import Fiesta from './fiesta';
+import Location from './location';
 
 const router = createBrowserRouter([
     {
@@ -16,7 +19,10 @@ const router = createBrowserRouter([
             {path: '/tour', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "관광지" }),}, // 여행 정보
             {path: '/food', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "음식점" })},
             {path: '/festival', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "축제" })},
-            {path: '/review', element: <Review />}, // 리뷰
+            // {path: '/location', element: <Location />}, // 여행지
+            // {path: '/dining', element: <Dining />}, // 음식점
+            // {path: '/fiesta', element: <Fiesta />}, // 축제
+            {path: '/review', element: <Review />}, // 후기작성
             {path: '/guide', element: <Guide />}, // 임시메뉴 Guide
         ]
     },
