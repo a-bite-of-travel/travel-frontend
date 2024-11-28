@@ -26,8 +26,10 @@ export default function Writing() {
             return;
         }
 
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NDQyNDUwM2FhM2I0ZjlkZjM0NTM3MCIsImVtYWlsIjoiYjEyMzRAdGVzdC5jb20iLCJpYXQiOjE3MzI1MTkwMjUsImV4cCI6MTczMzcyODYyNX0.MUTqtCUJL4z0c3NSKQ7op9IgFQMXRzatJUc2snhLt0A";
+
         const reviewData = {
-            type: status,
+            status,
             title,
             content,
             tags: tags.split(",").map(tag => tag.trim()), // 태그 배열로 변환
@@ -36,11 +38,18 @@ export default function Writing() {
         console.log("Submitted Data:", reviewData);
 
         try {
-            // API 호출 (예시)
-            const response = await fetch("http://localhost:3500", {
+            // API 호출
+            /*const token = localStorage.getItem("authToken");
+            if (!token) {
+                console.error("토큰이 없습니다.");
+                alert("로그인 후 이용해주세요.");
+                return;
+            }*/
+            const response = await fetch("http://localhost:3500/review", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify(reviewData),
             });

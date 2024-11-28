@@ -1,29 +1,44 @@
-import React, { useState } from 'react';
-import { Container, Grid, Typography, List, ListItem, ListItemText, Pagination, Button, Paper, Box, TextField } from '@mui/material';
-
-// 예제 데이터
-const sampleData = Array.from({ length: 30 }, (_, index) => ({
-    id: index + 1,
-    title: `게시판 제목 ${index + 1}`,
-    author: `작성자 ${index + 1}`,
-    date: `2023-11-${String(index + 1).padStart(2, '0')}`,
-    content: `이것은 게시판 제목 ${index + 1}의 상세 내용입니다.`,
-}));
+import React, { useEffect, useState } from 'react';
+import { Container, Grid, Typography, List, ListItem, ListItemText, Pagination, Button, Box, TextField } from '@mui/material';
 
 export default function ReviewList() {
+    const [reviews, setReviews] = useState([]); // 빈 배열로 초기화
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
     const [selectedReview, setSelectedReview] = useState(null); // 선택된 리뷰 데이터
     const [comments, setComments] = useState([]); // 댓글 데이터
     const [newComment, setNewComment] = useState(""); // 새 댓글
     const itemsPerPage = 7; // 한 페이지에 표시할 항목 수
 
-    // 현재 페이지에 해당하는 데이터 가져오기
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = sampleData.slice(startIndex, startIndex + itemsPerPage);
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const response = await fetch("http://localhost:3500/review");
+                const data = await response.json();
+
+                console.log("API에서 반환된 데이터:", data);
+
+                // 객체로 반환된 데이터에서 'data' 필드가 배열인지 확인하고 설정
+                if (data && Array.isArray(data.data)) {
+                    setReviews(data.data); // `data` 객체 내의 배열에 접근
+                } else {
+                    console.error("API에서 반환된 데이터가 예상 형식이 아닙니다:", data);
+                    setReviews([]); // 예상과 다른 형식의 데이터일 경우 빈 배열로 초기화
+                }
+            } catch (error) {
+                console.error("데이터 가져오기 실패:", error);
+                setReviews([]); // 에러 발생 시 빈 배열로 초기화
+            }
+        };
+
+        fetchReviews();
+    }, []);
 
     const handlePageChange = (event, value) => {
-        setCurrentPage(value); // 페이지 변경
+        setCurrentPage(value);
     };
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentItems = Array.isArray(reviews) ? reviews.slice(startIndex, startIndex + itemsPerPage) : [];
 
     const handleSelectReview = (review) => {
         setSelectedReview(review); // 선택된 리뷰 저장
@@ -72,28 +87,28 @@ export default function ReviewList() {
                                 {/* 총 건수 표시 */}
                                 <div className='txt_total'>
                                     <Typography variant="body1">
-                                        총 <strong>{sampleData.length}</strong> 건
+                                        총 <strong>{reviews.length}</strong> 건
                                     </Typography>
                                 </div>
 
                                 {/* 게시판 목록 */}
                                 <div className='list_area'>
                                     <List>
-                                        {currentItems.map((item) => (
+                                        {currentItems.map((review) => (
                                             <ListItem
-                                                key={item.id}
+                                                key={review._id || review.id}
                                                 button
-                                                onClick={() => handleSelectReview(item)} // 상세 보기
+                                                onClick={() => handleSelectReview(review)} // 상세 보기
                                             >
                                                 <ListItemText
                                                     primary={
                                                         <Typography variant="h6">
-                                                            {item.title}
+                                                            {review.title ? review.title : "제목 없음"}
                                                         </Typography>
                                                     }
                                                     secondary={
                                                         <Typography variant="body2" color="textSecondary">
-                                                            작성자: {item.author} | 날짜: {item.date}
+                                                            작성자: {review.author ? review.author : "작성자 없음"} | 날짜: {review.date ? review.date : "날짜 없음"}
                                                         </Typography>
                                                     }
                                                 />
@@ -104,7 +119,7 @@ export default function ReviewList() {
 
                                 {/* 페이징 컴포넌트 */}
                                 <Pagination
-                                    count={Math.ceil(sampleData.length / itemsPerPage)} // 총 페이지 수 계산
+                                    count={Math.ceil(reviews.length / itemsPerPage)} // 총 페이지 수 계산
                                     page={currentPage}
                                     onChange={handlePageChange}
                                 />
@@ -126,48 +141,47 @@ export default function ReviewList() {
                                 </Button>
                             </div>
                             {/* 댓글 영역 */}
-                    <Paper elevation={3} sx={{ padding: 3 }}>
-                        <Typography variant="h5" gutterBottom>
-                            댓글
-                        </Typography>
-                        <List sx={{ mb: 2 }}>
-                            {comments.map((comment) => (
-                                <ListItem
-                                    key={comment.id}
-                                    sx={{ borderBottom: "1px solid #e0e0e0" }}
-                                >
-                                    <ListItemText
-                                        primary={comment.text}
-                                        secondary={`작성일: ${comment.date}`}
-                                    />
-                                    <Button
-                                        size="small"
-                                        color="error"
-                                        onClick={() => handleDeleteComment(comment.id)}
-                                    >
-                                        삭제
-                                    </Button>
-                                </ListItem>
-                            ))}
-                        </List>
-
-                        <Box sx={{ display: "flex", gap: 1 }}>
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                placeholder="댓글을 입력하세요"
-                                value={newComment}
-                                onChange={(e) => setNewComment(e.target.value)}
-                            />
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={handleAddComment}
-                            >
-                                등록
-                            </Button>
-                        </Box>
-                    </Paper>
+                            <div className='comment_area'>
+                                <div className='comment_box'>
+                                    <Box sx={{ display: "flex", gap: 1 }}>
+                                        <TextField
+                                            fullWidth
+                                            variant="outlined"
+                                            placeholder="댓글을 입력하세요"
+                                            value={newComment}
+                                            onChange={(e) => setNewComment(e.target.value)}
+                                        />
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={handleAddComment}
+                                        >
+                                            댓글<br/>달기
+                                        </Button>
+                                    </Box>
+                                </div>
+                            
+                                <List sx={{ mb: 2 }}>
+                                    {comments.map((comment) => (
+                                        <ListItem
+                                            key={comment.id}
+                                            sx={{ borderBottom: "1px solid #e0e0e0" }}
+                                        >
+                                            <ListItemText
+                                                primary={comment.text}
+                                                secondary={`작성일: ${comment.date}`}
+                                            />
+                                            <Button
+                                                size="small"
+                                                color="error"
+                                                onClick={() => handleDeleteComment(comment.id)}
+                                            >
+                                                삭제
+                                            </Button>
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </div>
                         </Grid>
                     </Grid>
                 </>
