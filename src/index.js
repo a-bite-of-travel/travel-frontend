@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import router from './routes/route';
 import { RouterProvider } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { AuthProvider } from "./context/AuthContext";
 
 const theme = createTheme({
   palette: {
@@ -25,7 +26,7 @@ const theme = createTheme({
       main: '#888',
     },
     lightGray: {
-      main: '#D9D9D9',
+      main: '#d9d9d9',
     },
   },
 });
@@ -34,7 +35,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider >
     </ThemeProvider>
   </React.StrictMode>
 );

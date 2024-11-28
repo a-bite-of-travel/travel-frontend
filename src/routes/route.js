@@ -2,6 +2,8 @@ import {createBrowserRouter} from 'react-router-dom';
 import RouterLayout from './RouterLayout';
 import Main from './Main';
 import Guide from '../components/Guide';
+import Login from './Login';
+import Signup from './Signup';
 
 const router = createBrowserRouter([
     {
@@ -14,6 +16,8 @@ const router = createBrowserRouter([
             {path: '/tourinfo', element: <Main />}, // 여행 정보
             {path: '/review', element: <Main />}, // 리뷰
             {path: '/guide', element: <Guide />}, // 임시메뉴 Guide
+            {path: '/auth/login', element: <Login />}, // 임시메뉴 Guide
+            {path: '/auth/Signup', element: <Signup />}, // 임시메뉴 Guide
         ]
     },
 ]);
