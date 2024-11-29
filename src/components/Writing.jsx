@@ -5,7 +5,7 @@ import "react-quill/dist/quill.snow.css";
 
 export default function Writing() {
     /* State */
-    const [status, setStatus] = useState("ty1");
+    const [reviewType, setReviewType] = useState("ty1");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [tags, setTags] = useState("");
@@ -29,7 +29,7 @@ export default function Writing() {
         const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NDQyNDUwM2FhM2I0ZjlkZjM0NTM3MCIsImVtYWlsIjoiYjEyMzRAdGVzdC5jb20iLCJpYXQiOjE3MzI1MTkwMjUsImV4cCI6MTczMzcyODYyNX0.MUTqtCUJL4z0c3NSKQ7op9IgFQMXRzatJUc2snhLt0A";
 
         const reviewData = {
-            status,
+            reviewType,
             title,
             content,
             tags: tags.split(",").map(tag => tag.trim()), // 태그 배열로 변환
@@ -56,7 +56,7 @@ export default function Writing() {
             if (response.ok) {
                 alert("리뷰가 성공적으로 제출되었습니다!");
                 // 상태 초기화
-                setStatus("ty1");
+                setReviewType("ty1");
                 setTitle("");
                 setContent("");
                 setTags("");
@@ -131,8 +131,8 @@ export default function Writing() {
                     <FormLabel htmlFor="review-select">리뷰 선택</FormLabel>
                     <Select
                         id="review-select"
-                        value={status}
-                        onChange={(e) => setStatus(e.target.value)}
+                        value={reviewType}
+                        onChange={(e) => setReviewType(e.target.value)}
                     >
                         <MenuItem value="ty1">여행지</MenuItem>
                         <MenuItem value="ty2">음식점</MenuItem>
