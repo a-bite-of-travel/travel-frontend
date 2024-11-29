@@ -10,12 +10,18 @@ import {
 import axios from 'axios';
 import axiosInstance from "../utils/axiosInstance";
 import { useNavigate } from 'react-router-dom';
+import { useAppContext } from "../context/AppContext"; // Context 사용
+import { useAuth } from "../context/AuthContext";
+
+
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState({});
     const navigate = useNavigate();
+    const { triggerRefresh } = useAppContext();
+    const { loginedCheck } = useAuth();
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -39,12 +45,15 @@ export default function Login() {
                 password,
             });
             console.log('로그인 성공:', response.data);
+            const user = response.data.user
 
             // 로그인 성공 후 토큰 저장 및 페이지 이동
             localStorage.setItem('accessToken', response.data.accessToken);
             localStorage.setItem('refreshToken', response.data.refreshToken);
 
-            navigate('/');
+            await loginedCheck(user)
+            //triggerRefresh();
+            // navigate('/');
         } catch (err) {
             console.error('로그인 실패:', err.response ? err.response.data : err.message);
             setError({ general: '이메일 또는 비밀번호가 올바르지 않습니다.' });

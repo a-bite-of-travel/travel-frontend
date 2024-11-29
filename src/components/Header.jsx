@@ -1,9 +1,12 @@
 import { Stack, Container, Button, Grid, Avatar, Typography, Link } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from "../context/AuthContext";
-export default function Header() {
-    const { user, logout } = useAuth();
 
+export default function Header() {
+    const { isLoggedIn, user, logout } = useAuth(); // 로그인 상태 및 사용자 정보 가져오기
+
+    
+    console.log('Header Rendering', isLoggedIn, user);
     return (
         <header>
             <Container maxWidth="lg">
@@ -19,21 +22,27 @@ export default function Header() {
                         </Stack>
                     </Grid>
                     <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-                        
-                        {/* 로그인 전 */}
-                        <Stack spacing={1} direction="row" justifyContent="flex-end">
-                            <Link component={RouterLink} to="/auth/Login"><Button variant="text" size="small" sx={{ borderRadius: '20px' }}>Login</Button></Link>
-                            <Link component={RouterLink} to="/auth/Signup"><Button variant="contained" sx={{ borderRadius: '20px' }} size="small">Sign up</Button></Link>
-                        </Stack>
-                        
-                        {/* 로그인 후 */}
-                        <Stack direction="row" sx={{ alignItems: 'center' }} justifyContent="flex-end">
-                            <Link color="inherit" underline="none" to="/" component={RouterLink} sx={{ '&:hover': { color: 'primary.main' }, display: 'flex', alignItems: 'center' }}>
-                                <Avatar alt="Default" src="/images/profile_default.png" />
-                                <Typography variant="body1">{user?.user?.email || '사용자'}</Typography>
-                            </Link>
-                            <Button variant="text" size="small" sx={{ borderRadius: '20px', marginLeft: '20px !important' }} onClick={logout}>Sign out</Button>
-                        </Stack>
+                        {isLoggedIn ? (
+                            // 로그인된 경우
+                            <Stack direction="row" sx={{ alignItems: 'center' }} justifyContent="flex-end">
+                                <Link color="inherit" underline="none" to="/" component={RouterLink} sx={{ '&:hover': { color: 'primary.main' }, display: 'flex', alignItems: 'center' }}>
+                                    <Avatar
+                                        src={user?.profileImage ? `http://localhost:3500${user.profileImage}` : "/images/profile_default.png"} 
+                                        alt={user?.email || "닉네임"}
+                                    />
+                                    <Typography variant="body1" sx={{ marginLeft: '10px' }}>
+                                        {user?.nickName || "닉네임"}
+                                    </Typography>
+                                </Link>
+                                <Button variant="text" size="small" sx={{ borderRadius: '20px', marginLeft: '20px !important' }} onClick={logout}>Sign out</Button>
+                            </Stack>
+                        ) : (
+                            // 로그인되지 않은 경우
+                            <Stack spacing={1} direction="row" justifyContent="flex-end">
+                                <Link component={RouterLink} to="/auth/Login"><Button variant="text" size="small" sx={{ borderRadius: '20px' }}>Login</Button></Link>
+                                <Link component={RouterLink} to="/auth/Signup"><Button variant="contained" sx={{ borderRadius: '20px' }} size="small">Sign up</Button></Link>
+                            </Stack>
+                        )}
                     </Grid>
                 </Grid>
             </Container>

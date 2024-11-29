@@ -7,6 +7,7 @@ import router from './routes/route';
 import { RouterProvider } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthProvider } from "./context/AuthContext";
+import { AppProvider } from "./context/AppContext";
 
 const theme = createTheme({
   palette: {
@@ -36,7 +37,9 @@ root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <AppProvider>
+          <RouterProvider router={router} />
+        </AppProvider>
       </AuthProvider >
     </ThemeProvider>
   </React.StrictMode>

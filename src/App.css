@@ -4,8 +4,8 @@ body{color:#333}
 /* header */
 header{padding:10px 0;border-bottom: 1px solid #d8d8d8;}
 header .nav{margin-right: 80px;}
-header *{font-family: "Noto Sans KR", sans-serif !important; };
-header .MuiAvatar-root{border-bottom:1px solid #d8d8d8;margin-right:10px}
+header *{font-family: "Noto Sans KR", sans-serif !important; }
+header .MuiAvatar-root{border:1px solid #d8d8d8 !important;}
 
 #container{padding:25px 0}
 

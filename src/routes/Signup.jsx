@@ -16,13 +16,13 @@ export default function Signup() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [nickName, setNickName] = useState("");
-    const [profileImg, setProfileImg] = useState(null);
+    const [profileImage, setProfileImage] = useState(null);
     const [error, setError] = useState({});
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("handleSubmit", email, nickName);
+        console.log("handleSubmit", email, nickName,profileImage);
         await regist();
     };
 
@@ -34,8 +34,8 @@ export default function Signup() {
             formData.append('confirmPassword', confirmPassword);
             formData.append('nickName', nickName);
 
-            if (profileImg) {
-                formData.append('profile_img', profileImg);
+            if (profileImage) {
+                formData.append('profileImage', profileImage);
             }
 
             const resp = await axiosInstance.post("/auth/register", formData, {
@@ -43,7 +43,16 @@ export default function Signup() {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log('회원가입 성공:', resp.data);
+            console.log("회원가입 응답 데이터:", resp.data); // 디버깅용
+            
+            //상태 초기화
+            // setEmail("");
+            // setPassword("");
+            // setConfirmPassword("");
+            // setNickName("");
+            // setProfileImage(null);
+            // setError({});
+
             navigate("/auth/login");
         } catch (error) {
             console.error("회원가입 실패:", error.response ? error.response.data : error.message);
@@ -63,7 +72,7 @@ export default function Signup() {
     };
 
     const handleFileChange = (e) => {
-        setProfileImg(e.target.files[0]);
+        setProfileImage(e.target.files[0]);
     };
 
     return (
@@ -113,18 +122,18 @@ export default function Signup() {
                             />
                             <TextField
                                 label="Profile image"
-                                value={profileImg ? profileImg.name : ''}
+                                value={profileImage ? profileImage.name : ''}
                                 InputProps={{
                                     readOnly: true,
                                     endAdornment: (
                                         <InputAdornment position="end">
                                             <input
                                                 type="file"
-                                                id="profileImg"
+                                                id="profileImage"
                                                 style={{ display: 'none' }}
                                                 onChange={handleFileChange}
                                             />
-                                            <label htmlFor="profileImg">
+                                            <label htmlFor="profileImage">
                                                 <Button variant="contained" component="span">
                                                     upload
                                                 </Button>
@@ -134,8 +143,8 @@ export default function Signup() {
                                 }}
                                 fullWidth
                                 sx={{ flex: 1 }}
-                                error={!!error.profile_img}
-                                helperText={error.profile_img}
+                                error={!!error.profileImage}
+                                helperText={error.profileImage}
                             />
                             {error.general && (
                                 <div style={{ color: '#d32f2f', fontSize:'0.75rem',textAlign: 'center' }}>{error.general}</div>
