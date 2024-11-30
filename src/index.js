@@ -12,7 +12,7 @@ import { AppProvider } from "./context/AppContext";
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#0082FF', //blue
+      main: '#0fc499', //그린오로라
     },
     secondary: {
       main: '#FF0A73', //pink
@@ -29,6 +29,41 @@ const theme = createTheme({
     lightGray: {
       main: '#d9d9d9',
     },
+  }, 
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          color: "#FFFFFF",
+          "&:hover": {
+            color: "#FFFFFF", 
+          },
+          fontFamily: 'Noto Sans KR, Arial, sans-serif',
+        },
+        outlined: {
+          color: "#0fc499",
+          "&:hover": {
+            color: "#0fc499", 
+          }
+        },
+        contained: {
+          boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.1)',
+        },
+        text: {
+          color: "#0fc499",
+          "&:hover": {
+            color: "#0fc499", 
+          }
+        },
+      },
+    },
+    MuiTypography:{
+      styleOverrides: {
+        root: {
+          fontFamily: 'Noto Sans KR, Arial, sans-serif',
+        },
+      },
+    }
   },
 });
 
@@ -37,9 +72,9 @@ root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <AppProvider>
+        {/* <AppProvider> */}
           <RouterProvider router={router} />
-        </AppProvider>
+        {/* </AppProvider> */}
       </AuthProvider >
     </ThemeProvider>
   </React.StrictMode>

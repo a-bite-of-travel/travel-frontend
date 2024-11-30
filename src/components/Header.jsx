@@ -15,7 +15,7 @@ export default function Header() {
                         <h1><Link component={RouterLink} to="/tour"><img src="/images/h1_ssoulRoad.png" alt="Ssoul Road" /></Link></h1>
                     </Grid>
                     <Grid item sx={{ display: 'flex', alignItems: 'center' }} className="nav">
-                        <Stack spacing={10} direction="row">
+                        <Stack spacing={7} direction="row">
                             <Link component={RouterLink} to="/" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>여행계획</b></Link>
                             <Link component={RouterLink} to="/" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>여행정보</b></Link>
                             <Link component={RouterLink} to="/guide" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>Guide</b></Link>
@@ -25,7 +25,7 @@ export default function Header() {
                         {isLoggedIn ? (
                             // 로그인된 경우
                             <Stack direction="row" sx={{ alignItems: 'center' }} justifyContent="flex-end">
-                                <Link color="inherit" underline="none" to="/" component={RouterLink} sx={{ '&:hover': { color: 'primary.main' }, display: 'flex', alignItems: 'center' }}>
+                                <Link color="inherit" underline="none" to={`/${user?.id}`} component={RouterLink} sx={{ '&:hover': { color: 'primary.main' }, display: 'flex', alignItems: 'center' }}>
                                     <Avatar
                                         src={user?.profileImage ? `http://localhost:3500${user.profileImage}` : "/images/profile_default.png"} 
                                         alt={user?.email || "닉네임"}
@@ -39,7 +39,7 @@ export default function Header() {
                         ) : (
                             // 로그인되지 않은 경우
                             <Stack spacing={1} direction="row" justifyContent="flex-end">
-                                <Link component={RouterLink} to="/auth/Login"><Button variant="text" size="small" sx={{ borderRadius: '20px' }}>Login</Button></Link>
+                                <Link component={RouterLink} to="/auth/Login"><Button variant="text" sx={{ borderRadius: '20px' }}>Login</Button></Link>
                                 <Link component={RouterLink} to="/auth/Signup"><Button variant="contained" sx={{ borderRadius: '20px' }} size="small">Sign up</Button></Link>
                             </Stack>
                         )}

@@ -20,7 +20,7 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState({});
     const navigate = useNavigate();
-    const { triggerRefresh } = useAppContext();
+    //const { triggerRefresh } = useAppContext();
     const { loginedCheck } = useAuth();
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -53,7 +53,7 @@ export default function Login() {
 
             await loginedCheck(user)
             //triggerRefresh();
-            // navigate('/');
+            navigate('/');
         } catch (err) {
             console.error('로그인 실패:', err.response ? err.response.data : err.message);
             setError({ general: '이메일 또는 비밀번호가 올바르지 않습니다.' });
