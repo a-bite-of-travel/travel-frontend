@@ -2,15 +2,21 @@ import React, { useState, useRef } from "react";
 import { Container, FormControl, FormLabel, Select, MenuItem, TextField, Button } from "@mui/material";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import DOMPurify from "dompurify";
 
 export default function Writing() {
     /* State */
     const [reviewType, setReviewType] = useState("ty1");
     const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
+    const [content, setContent] = useState(""); // 초기 값은 빈 문자열
     const [tags, setTags] = useState("");
     const [errors, setErrors] = useState({});
     const quillRef = useRef(null);
+
+    // HTML 태그 제거 함수
+    const stripHtml = (html) => {
+        return DOMPurify.sanitize(html, { ALLOWED_TAGS: [] }); // 모든 태그 제거
+    };
 
     /* Handlers */
     const handleSubmit = async (event) => {
@@ -26,12 +32,15 @@ export default function Writing() {
             return;
         }
 
+        // 태그가 제거된 텍스트 콘텐츠를 사용
+        const strippedContent = stripHtml(content);
+
         const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NDQyNDUwM2FhM2I0ZjlkZjM0NTM3MCIsImVtYWlsIjoiYjEyMzRAdGVzdC5jb20iLCJpYXQiOjE3MzI1MTkwMjUsImV4cCI6MTczMzcyODYyNX0.MUTqtCUJL4z0c3NSKQ7op9IgFQMXRzatJUc2snhLt0A";
 
         const reviewData = {
             reviewType,
             title,
-            content,
+            content: strippedContent, // 태그가 제거된 내용 사용
             tags: tags.split(",").map(tag => tag.trim()), // 태그 배열로 변환
         };
 
@@ -55,7 +64,6 @@ export default function Writing() {
             });
             if (response.ok) {
                 alert("리뷰가 성공적으로 제출되었습니다!");
-                // 상태 초기화
                 setReviewType("ty1");
                 setTitle("");
                 setContent("");
@@ -70,33 +78,7 @@ export default function Writing() {
         }
     };
 
-    /*const handleImageUpload = () => {
-        const input = document.createElement("input");
-        input.setAttribute("type", "file");
-        input.setAttribute("accept", "image/*");
-        input.click();
 
-        input.onchange = async () => {
-            const file = input.files[0];
-            const formData = new FormData();
-            formData.append("image", file);
-
-            try {
-                // 이미지 업로드 API 호출
-                const response = await fetch("https://api.example.com/upload", {
-                    method: "POST",
-                    body: formData,
-                });
-                const data = await response.json();
-
-                const quill = quillRef.current.getEditor(); // Quill 인스턴스 가져오기
-                const range = quill.getSelection(); // 현재 커서 위치 가져오기
-                quill.insertEmbed(range.index, "image", data.url); // 이미지 삽입
-            } catch (error) {
-                console.error("Failed to upload image", error);
-            }
-        };
-    };*/
 
     const modules = {
         toolbar: {
@@ -104,11 +86,8 @@ export default function Writing() {
                 [{ header: [1, 2, false] }],
                 ["bold", "italic", "underline"],
                 [{ list: "ordered" }, { list: "bullet" }],
-                ["link", "image"], // 이미지 버튼 추가
+                ["link", "image"], 
             ],
-            /*handlers: {
-                image: handleImageUpload, // 사용자 정의 이미지 업로드 핸들러
-            },*/
         },
     };
 

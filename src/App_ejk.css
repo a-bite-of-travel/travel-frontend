@@ -43,14 +43,14 @@
 .ditail_area .txt_author{margin: 20px 0;text-align: right;font-size: 16px;color: #555;font-weight: 600;}
 .ditail_area .txt_author span{color: #888;font-weight: 400;}
 .ditail_area button{width: 200px;height: 50px;background: #0082FF;padding: 0;font-size: 18px;margin-left: 44%;margin-top: 60px;}
-.txt_content{font-size: 20px;color: #888;}
+.txt_content{font-size: 20px;color: #888;word-break: break-all;}
 .comment_area{margin: 0 0 50px;}
 .comment_box{background: #F0F0F0;padding: 20px;border-radius: 8px;}
 .comment_box input{height: 60px;background: #fff;font-size: 20px;color: #666;}
 .comment_box button{width: 120px;height: 91px;background: #0082FF;padding: 0;font-size: 20px;line-height: 25px;box-shadow: none;}
-
-
-
+.left_review li{padding: 0;}
+.left_review li h6{font-size: 24px;color: #333;margin: 15px 0;}
+.left_review li p{font-size: 16px;color: #888;}
 
 
 .mt40{margin-top: 40px;}

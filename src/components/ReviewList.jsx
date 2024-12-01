@@ -125,7 +125,6 @@ export default function ReviewList() {
             }
 
             const responseData = await response.json();
-            console.log(responseData, response.ok, selectedReview)
             if (response.ok && responseData.data) {
                 // 댓글이 성공적으로 추가된 후 서버에서 최신 댓글 목록 가져오기
                 await handleSelectReview(selectedReview);
@@ -172,7 +171,27 @@ export default function ReviewList() {
                         {/* 왼쪽 영역 */}
                         <Grid item xs={4}>
                             <h3 className='tit_h3 mt40'>추천 리뷰</h3>
-                            <div>
+                            <div className='left_review'>
+                                {reviews.length > 0 && (
+                                    <ListItem
+                                        key={reviews[0]._id}
+                                        button
+                                        onClick={() => handleSelectReview(reviews[0])}
+                                    >
+                                        <ListItemText
+                                            primary={
+                                                <Typography variant="h6">
+                                                    {reviews[0].title}
+                                                </Typography>
+                                            }
+                                            secondary={
+                                                <Typography variant="body2" color="textSecondary">
+                                                    {reviews[0].content}
+                                                </Typography>
+                                            }
+                                        />
+                                    </ListItem>
+                                )}
                             </div>
                         </Grid>
 
