@@ -1,6 +1,24 @@
 
 import * as React from 'react';
-import { Stack, Container, Button, FormControl, FormControlLabel, FormLabel, Select, TextField, Radio, RadioGroup, MenuItem, FormHelperText, Dialog, DialogTitle, DialogContent, DialogContentText, Box, DialogActions } from '@mui/material';
+import { 
+    Stack, 
+    Container, 
+    Button, 
+    FormControl, 
+    FormControlLabel, 
+    FormLabel, Select, 
+    TextField, 
+    Radio, 
+    RadioGroup, 
+    MenuItem, 
+    FormHelperText, 
+    Dialog, 
+    DialogTitle, 
+    DialogContent, 
+    DialogContentText, 
+    DialogActions ,
+    Box,
+} from '@mui/material';
 
 export default function Guide() {
     /* select */
@@ -33,7 +51,7 @@ export default function Guide() {
                     <Stack spacing={1}>
                         <TextField
                             id=""
-                            label="Eamil"
+                            label="Email"
                         />
                         <TextField
                             id=""
