@@ -1,0 +1,63 @@
+* {font-family: "Noto Sans KR", sans-serif !important;}
+.contents_wrap{min-height: calc(100vh - 100px);}
+
+/* title */
+.tit_imgwrap{width: 100%;height: 148px;border-bottom: 1px solid #D9D9D9;}
+.tit_img{position: relative;width: 100%;height: 148px;font-size: 50px;font-weight: 600;padding: 35px 0 0 25px;box-sizing: border-box;}
+.tit_img:after{display: block;position: absolute;content: '';top: 0;right: 0;height: 148px;}
+.tit_img.ty1:after{width: 600px;background: url('../public/images/tit_img1.png');}
+.tit_img.ty2:after{width: 800px;background: url('../public/images/tit_img2.png');}
+.tit_img.ty3:after{width: 800px;background: url('../public/images/tit_img3.png');}
+.tit_img.ty4:after{width: 600px;background: url('../public/images/tit_img4.png');}
+.tit_img.ty5:after{width: 600px;background: url('../public/images/tit_img5.png');}
+
+/* writing */
+.writing_area{width: 100%;padding: 50px 0;}
+.writing_area .MuiFormControl-root{width: 100%;display: flex;flex-direction: row;align-items: baseline;gap: 25px;}
+.writing_area .MuiFormControl-root + .MuiFormControl-root{margin-top: 25px;}
+.writing_area .MuiFormControl-root > label{width: 150px;text-align: right;font-size: 20px;font-weight: 600;color: #666;}
+.writing_area .MuiFormControl-root > label + div{display: block;width: calc(100% - 150px);font-size: 16px;color: #333;}
+.writing_area .MuiFormControl-root > label + div p{font-size: 14px;color: red;}
+.writing_area .MuiFormControl-root > label + div.css-5oflvt-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root{width: 30%;height: 55px;}
+.css-1ahakfv-MuiInputBase-root-MuiOutlinedInput-root{width: 100%;}
+.quill{height: 500px;margin-bottom: 50px;}
+.writing_area .MuiFormControl-root > label + div.quill p{color: #333;}
+.quill + p{position: absolute;top: 60px;left: 40px;font-size: 14px;}
+.ql-editor, input::placeholder{font-size: 16px;}
+.ql-toolbar.ql-snow{border-top-left-radius: 4px;border-top-right-radius: 4px;}
+.ql-container.ql-snow{border-bottom-left-radius: 4px;border-bottom-right-radius: 4px;}
+.btn_area{display: flex;justify-content: center;margin-top: 30px;}
+.btn_area button{width: 200px;height: 50px;font-size: 18px;}
+
+
+/* list, detail */
+.tit_h3{font-size: 30px;font-weight: 600;color: #333;}
+.list_wrap{margin-top: 45px;margin-bottom: 60px;}
+.list_area{margin: 10px 0;border-top: 1px solid #aaa;border-bottom: 1px solid #aaa;}
+.txt_total p{font-size: 24px;color: #333;}
+.txt_total strong{color:#0082FF;font-weight: 600;font-style: normal;}
+.MuiPagination-root{display: flex;justify-content: center;}
+.MuiPagination-root .Mui-selected{background-color: #0082FF !important;color: #fff;}
+.ditail_area{padding: 50px 0;}
+.ditail_area .tit_h4{font-size: 40px;text-align: center;font-weight: 500;}
+.ditail_area .txt_author{margin: 20px 0;text-align: right;font-size: 16px;color: #555;font-weight: 600;}
+.ditail_area .txt_author span{color: #888;font-weight: 400;}
+.ditail_area button{width: 200px;height: 50px;background: #0082FF;padding: 0;font-size: 18px;margin-left: 44%;margin-top: 60px;}
+.txt_content{font-size: 20px;color: #888;word-break: break-all;}
+.comment_area{margin: 0 0 50px;}
+.comment_box{background: #F0F0F0;padding: 20px;border-radius: 8px;}
+.comment_box input{height: 60px;background: #fff;font-size: 20px;color: #666;}
+.comment_box button{width: 120px;height: 91px;background: #0082FF;padding: 0;font-size: 20px;line-height: 25px;box-shadow: none;}
+.left_review li{padding: 0;}
+.left_review li h6{font-size: 24px;color: #333;margin: 15px 0;}
+.left_review li p{font-size: 16px;color: #888;}
+
+
+.mt40{margin-top: 40px;}
+.mr30{margin-right: 30px;}
+
+
+
+
+
+
