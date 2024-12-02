@@ -1,28 +1,38 @@
 *{padding:0;margin:0;}
-body{color:#333}
+body{color:#333;font-family: "Noto Sans KR", sans-serif;}
+body .css-sjos3-MuiFormLabel-root{font-family: "Noto Sans KR", sans-serif;}
 
 /* header */
 header{padding:10px 0;border-bottom: 1px solid #d8d8d8;}
 header .nav{margin-right: 80px;}
-header *{font-family: "Noto Sans KR", sans-serif !important; };
-header .MuiAvatar-root{border-bottom:1px solid #d8d8d8;margin-right:10px}
+.MuiAvatar-root{border:1px solid #d8d8d8 !important;}
+header h1 a img{height:23px}
 
-#container{padding:25px}
+#container{padding:25px 0}
 
 /* footer */
 footer{background-color:#333;color:#fff;font-family:"Baloo Bhai 2", sans-serif;font-size: 15px;text-align: center;padding:5.5px 0;}
 
-
-
-
-/* button */
-button{font-family: "Noto Sans KR", sans-serif !important;}
-
 /* layer */
-.customLayer01 *{font-family: "Noto Sans KR", sans-serif}
-.customLayer01 h2{background-color: #0082FF;color:#fff}
+.customLayer01 h2{background-color: #0fc499;color:#fff}
 .customLayer01 h2 button{color:#fff;font-size:18px;position:absolute;right:0px;top:10px;transform: scaleY(0.7);}
-
+.customLayer01 h2 button:hover{color:#fff}
 .customLayer01 .MuiDialogContent-root{padding:20px !important}
 .customLayer01 .MuiDialogActions-root{padding:0px 0 20px}
 
+/* 로그인 */
+.login-logo{text-align: center;}
+.login-logo img{height:23px}
+
+#container.bg-login{background: url('../public/images/bg_login.png') no-repeat;background-size: cover;height:100vh}
+
+/* 메인 */
+#container.bg-main {position: relative;height: 100vh;overflow: hidden;} 
+.bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0;  transition: opacity 3s ease-in-out; }
+.bg1 { background-image: url('../public/images/bg_main01.png');}  
+.bg2 { background-image: url('../public/images/bg_main02.png');}  
+.bg3 {background-image: url('../public/images/bg_main03.png');}
+#container.bg-main p{color:#fff;font-size: 45px;position:relative;z-index: 2;height:100%;text-shadow:0 0 10px rgba(0,0,0,0.2);font-weight: bold;padding-top:200px}
+#container.bg-main a{font-size: 30px !important;color: #fff !important;position:absolute;z-index: 2;text-decoration: none !important;background: rgba(255,255,255,0.1);padding:17px 64px;border:1px solid #fff !important;left:50%;top:50%;transform:translate(-50%, -50%)}
+
+/* mypage */
