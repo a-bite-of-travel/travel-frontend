@@ -7,8 +7,7 @@ import Signup from './Signup';
 import Mypage from './Mypage';
 import Tourinfo from './tourinfo';
 import Review from './Review';
-import Review from '../routes/Review'
-import TourInfo, { loader as tourInfoLoader } from './TourInfo';
+// import TourInfo, { loader as tourInfoLoader } from './TourInfo';
 import Location from './location';
 
 const router = createBrowserRouter([
@@ -20,9 +19,9 @@ const router = createBrowserRouter([
             {path: '/:userId', element: <Mypage />}, // 마이페이지
             {path: '/tourinfo', element: <Tourinfo />}, // 여행 정보 // 여행지
             {path: '/plan', element: <Main />}, // 여행 게획
-            {path: '/tour', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "관광지" }),}, // 여행 정보
-            {path: '/food', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "음식점" })},
-            {path: '/festival', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "축제" })},
+            // {path: '/tour', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "관광지" }),}, // 여행 정보
+            // {path: '/food', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "음식점" })},
+            // {path: '/festival', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "축제" })},
             // {path: '/location', element: <Location />}, // 여행지
             // {path: '/dining', element: <Dining />}, // 음식점
             // {path: '/fiesta', element: <Fiesta />}, // 축제
