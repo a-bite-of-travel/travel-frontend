@@ -5,7 +5,7 @@ import Guide from '../components/Guide';
 import Login from './Login';
 import Signup from './Signup';
 import Mypage from './Mypage';
-import Tourinfo from './tourinfo';
+import ReviewTour from './ReviewTour';
 import Review from './Review';
 // import TourInfo, { loader as tourInfoLoader } from './TourInfo';
 import Location from './location';
