@@ -4,9 +4,7 @@ import Main from './Main';
 import Guide from '../components/Guide';
 import Review from '../routes/Review'
 import TourInfo, { loader as tourInfoLoader } from './TourInfo';
-import Dining from './dining';
-import Fiesta from './fiesta';
-import Location from './location';
+import Plan, { loader as tourPlanLoader, action as tourPlanAction } from './Plan';
 
 const router = createBrowserRouter([
     {
@@ -15,13 +13,10 @@ const router = createBrowserRouter([
         children: [
             {path: '/', element: <Main />}, // 매인
             {path: '/:userId', element: <Main />}, // 마이페이지
-            {path: '/plan', element: <Main />}, // 여행 게획
-            {path: '/tour', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "관광지" }),}, // 여행 정보
-            {path: '/food', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "음식점" })},
-            {path: '/festival', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "축제" })},
-            // {path: '/location', element: <Location />}, // 여행지
-            // {path: '/dining', element: <Dining />}, // 음식점
-            // {path: '/fiesta', element: <Fiesta />}, // 축제
+            {path: '/plan', element: <Plan />, loader: tourPlanLoader, action: tourPlanAction}, // 여행 게획
+            {path: '/tour', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "12" }),}, // 여행 정보
+            {path: '/food', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "39" })},
+            {path: '/festival', element: <Main />},
             {path: '/review', element: <Review />}, // 후기작성
             {path: '/guide', element: <Guide />}, // 임시메뉴 Guide
         ]

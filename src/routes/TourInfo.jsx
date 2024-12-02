@@ -3,14 +3,10 @@ import { useLoaderData, useNavigate, useSearchParams, useLocation } from 'react-
 import { useState, useEffect } from 'react';
 
 export default function TourInfo() {
-    const data = useLoaderData();
+    const { tourCodeList, tourInfoList, totalCount } = useLoaderData();
+    const { sigungu } = tourCodeList;
     const location = useLocation(); // 현재 경로를 감지
     const [searchParams, setSearchParams] = useSearchParams();
-
-    const tourInfoList = data.tourInfoList;
-    const sigunguCode = data.tourCodeList.sigunguCode;
-    const totalCount = data.totalCount;
-
     const [searchText, setSearchText] = useState('');
     const [selectedRegions, setSelectedRegions] = useState([]);
 
@@ -86,7 +82,7 @@ export default function TourInfo() {
             </form>
 
             <p>지역 선택</p>
-            {sigunguCode.map((region) => (
+            {sigungu.map((region) => (
                 <div key={region.code}>
                     <label>
                         <input
@@ -134,7 +130,7 @@ export default function TourInfo() {
 // Loader with searchParams
 export async function loader({ request, type }) {
     const url = new URL(request.url);
-    const contenttypeid = type || '관광지';
+    const contenttypeid = type || '12';
     const region = url.searchParams.get('region') || '';
     const page = parseInt(url.searchParams.get('page') || '1', 10);
     const searchText = url.searchParams.get('searchText') || '';
