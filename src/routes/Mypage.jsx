@@ -24,7 +24,7 @@ export default function Mypage() {
                             sx={{ width: 100, height: 100 }}
                         />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs>
                         <Typography variant="body1">
                             <b>Nickname : </b> {user?.nickName}
                         </Typography>
