@@ -26,7 +26,7 @@ export default function Header() {
                         </Grid>
                         <Grid item sx={{ display: 'flex', alignItems: 'center' }} className="nav">
                             <Stack spacing={10} direction="row">
-                                <Link component={RouterLink} to="/" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>여행계획</b></Link>
+                                <Link component={RouterLink} to="/plan" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>여행계획</b></Link>
                                 <Link
                                     color="inherit"
                                     underline="none"
