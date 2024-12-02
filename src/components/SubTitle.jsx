@@ -6,8 +6,9 @@ export default function SubTitle({type}) {
         ty1:"여행지",
         ty2:"음식점",
         ty3:"축제",
-        ty4:"후기작성",
+        ty4:"리뷰 작성",
         ty5:"My Page",
+        ty6:"리뷰 목록",
     };
     return (
         <div className="tit_imgwrap">

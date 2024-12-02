@@ -3,6 +3,7 @@ import { Container, FormControl, FormLabel, Select, MenuItem, TextField, Button 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import DOMPurify from "dompurify";
+import axiosInstance from "../utils/axiosInstance";
 
 export default function Writing() {
     /* State */
@@ -35,35 +36,21 @@ export default function Writing() {
         // 태그가 제거된 텍스트 콘텐츠를 사용
         const strippedContent = stripHtml(content);
 
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NDQyNDUwM2FhM2I0ZjlkZjM0NTM3MCIsImVtYWlsIjoiYjEyMzRAdGVzdC5jb20iLCJpYXQiOjE3MzI1MTkwMjUsImV4cCI6MTczMzcyODYyNX0.MUTqtCUJL4z0c3NSKQ7op9IgFQMXRzatJUc2snhLt0A";
-
         const reviewData = {
             reviewType,
             title,
             content: strippedContent, // 태그가 제거된 내용 사용
-            tags: tags.split(",").map(tag => tag.trim()), // 태그 배열로 변환
+            tags: tags.split(",").map(tag => tag.trim()),  //태그 배열로 변환
         };
 
         console.log("Submitted Data:", reviewData);
 
         try {
             // API 호출
-            /*const token = localStorage.getItem("authToken");
-            if (!token) {
-                console.error("토큰이 없습니다.");
-                alert("로그인 후 이용해주세요.");
-                return;
-            }*/
-            const response = await fetch("http://localhost:3500/review", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                },
-                body: JSON.stringify(reviewData),
-            });
-            if (response.ok) {
+            const response = await axiosInstance.post("/review", reviewData);
+            if (response.status === 200) {
                 alert("리뷰가 성공적으로 제출되었습니다!");
+                // 상태 초기화
                 setReviewType("ty1");
                 setTitle("");
                 setContent("");
@@ -77,8 +64,6 @@ export default function Writing() {
             alert("서버와 통신 중 문제가 발생했습니다.");
         }
     };
-
-
 
     const modules = {
         toolbar: {
@@ -112,6 +97,7 @@ export default function Writing() {
                         id="review-select"
                         value={reviewType}
                         onChange={(e) => setReviewType(e.target.value)}
+                        className="select_box"
                     >
                         <MenuItem value="ty1">여행지</MenuItem>
                         <MenuItem value="ty2">음식점</MenuItem>
@@ -128,6 +114,7 @@ export default function Writing() {
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         helperText={errors.title}
+                        className="inp_box"
                     />
                 </FormControl>
 
@@ -155,6 +142,7 @@ export default function Writing() {
                         value={tags}
                         onChange={(e) => setTags(e.target.value)}
                         helperText={errors.tags}
+                        className="inp_box"
                     />
                 </FormControl>
 
