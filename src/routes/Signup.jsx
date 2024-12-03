@@ -38,9 +38,9 @@ export default function Signup() {
                 formData.append('profileImage', profileImage);
             }
 
-            const resp = await axiosInstance.post("/auth/register", formData, {
+            const resp = await axiosInstance.post("/users/register", formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'application/json',
                 },
             });
             console.log("회원가입 응답 데이터:", resp.data); // 디버깅용
