@@ -2,29 +2,26 @@ import {createBrowserRouter} from 'react-router-dom';
 import RouterLayout from './RouterLayout';
 import Main from './Main';
 import Guide from '../components/Guide';
+import TourInfo, { loader as tourInfoLoader } from './TourInfo';
+import Plan, { loader as tourPlanLoader, action as tourPlanAction } from './Plan';
 import Login from './Login';
 import Signup from './Signup';
 import Mypage from './Mypage';
 import ReviewTour from './ReviewTour';
 import Review from './Review';
-// import TourInfo, { loader as tourInfoLoader } from './TourInfo';
-import Location from './location';
 
 const router = createBrowserRouter([
     {
         path: '',
         element: <RouterLayout />,
         children: [
-            {path: '/', element: <Main />}, // 메인
+            {path: '/', element: <Main />}, // 매인
             {path: '/:userId', element: <Mypage />}, // 마이페이지
-            {path: '/tourinfo', element: <Tourinfo />}, // 여행 정보 // 여행지
-            {path: '/plan', element: <Main />}, // 여행 게획
-            // {path: '/tour', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "관광지" }),}, // 여행 정보
-            // {path: '/food', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "음식점" })},
-            // {path: '/festival', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "축제" })},
-            // {path: '/location', element: <Location />}, // 여행지
-            // {path: '/dining', element: <Dining />}, // 음식점
-            // {path: '/fiesta', element: <Fiesta />}, // 축제
+            {path: '/tourinfo', element: <ReviewTour />}, // 여행 정보 // 여행지
+            {path: '/plan', element: <Plan />, loader: tourPlanLoader, action: tourPlanAction}, // 여행 게획
+            {path: '/tour', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "12" }),}, // 여행 정보
+            {path: '/food', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "39" })},
+            {path: '/festival', element: <Main />},
             {path: '/review', element: <Review />}, // 후기작성
             {path: '/guide', element: <Guide />}, // 임시메뉴 Guide
             {path: '/auth/login', element: <Login />}, // 로그인
