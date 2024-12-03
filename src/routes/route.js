@@ -5,10 +5,8 @@ import Guide from '../components/Guide';
 import Login from './Login';
 import Signup from './Signup';
 import Mypage from './Mypage';
-import ReviewTour from './ReviewTour';
 import Review from './Review';
 // import TourInfo, { loader as tourInfoLoader } from './TourInfo';
-import Location from './location';
 
 const router = createBrowserRouter([
     {
@@ -17,7 +15,6 @@ const router = createBrowserRouter([
         children: [
             {path: '/', element: <Main />}, // 메인
             {path: '/:userId', element: <Mypage />}, // 마이페이지
-            {path: '/tourinfo', element: <Tourinfo />}, // 여행 정보 // 여행지
             {path: '/plan', element: <Main />}, // 여행 게획
             // {path: '/tour', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "관광지" }),}, // 여행 정보
             // {path: '/food', element: <TourInfo />, loader: (args) => tourInfoLoader({ ...args, type: "음식점" })},
