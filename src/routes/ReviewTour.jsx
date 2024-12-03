@@ -5,7 +5,7 @@ import ReviewList from "../components/ReviewList";
 export default function ReviewTour() {
     return (
         <div className="contents_wrap">
-            <SubTitle type="ty1" />
+            <SubTitle type="ty6" />
             <ReviewList />
         </div>
     );

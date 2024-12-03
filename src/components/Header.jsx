@@ -7,7 +7,9 @@ export default function Header() {
     // 로그인 상태 및 사용자 정보 가져오기
     const { loginedCheck,isLoggedIn, user, logout } = useAuth();
     const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorE2, setAnchorE2] = useState(null);
     const open = Boolean(anchorEl);
+    const open2 = Boolean(anchorE2);
 
     const handleMenuClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -15,8 +17,15 @@ export default function Header() {
     loginedCheck(user)
     console.log('header',user)
 
+    const handleMenuClick2 = (event) => {
+        setAnchorE2(event.currentTarget);
+    };
+
     const handleMenuClose = () => {
         setAnchorEl(null);
+    };
+    const handleMenuClose2 = () => {
+        setAnchorE2(null);
     };
 
 
@@ -62,8 +71,35 @@ export default function Header() {
                                     <MenuItem onClick={handleMenuClose} component={RouterLink} to="/festival">
                                         축제
                                     </MenuItem>
-                                    <MenuItem onClick={handleMenuClose} component={RouterLink} to="/review">
-                                        후기 작성
+                                </Menu>
+                                <Link
+                                    color="inherit"
+                                    underline="none"
+                                    sx={{ '&:hover': { color: 'primary.main' }, cursor: 'pointer' }}
+                                    onClick={handleMenuClick2}
+                                >
+                                    <b>리뷰</b>
+                                </Link>
+                                <Menu
+                                    anchorEl={anchorE2}
+                                    open={open2}
+                                    onClose={handleMenuClose2}
+                                    anchorOrigin={{
+                                        vertical: 'bottom', 
+                                        horizontal: 'left', 
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'top',   
+                                        horizontal: 'left', 
+                                    }}
+                                    disableAutoFocusItem
+                                    disableRestoreFocus
+                                >
+                                    <MenuItem onClick={handleMenuClose2} component={RouterLink} to="/tourinfo">
+                                        리뷰 목록
+                                    </MenuItem>
+                                    <MenuItem onClick={handleMenuClose2} component={RouterLink} to="/review">
+                                        리뷰 작성
                                     </MenuItem>
                                 </Menu>
                                 <Link component={RouterLink} to="/guide" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>Guide</b></Link>
