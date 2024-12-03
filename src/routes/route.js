@@ -19,6 +19,7 @@ const router = createBrowserRouter([
             {path: '/', element: <Main />}, // 매인
             {path: '/:userId', element: <Mypage />}, // 마이페이지
             {path: '/tourinfo', element: <ReviewTour />}, // 여행 정보 // 여행지
+            {path: '/plan', element: <Main />}, // 여행 게획
             {path: '/plan', element: <Plan />, loader: tourPlanLoader, action: tourPlanAction}, // 여행 게획
             {path: '/tour', element: <TourInfoList />, loader: (args) => tourInfoLoader({ ...args, type: "12" }),}, // 여행 정보
             {path: '/tour/:contentid', element: <TourInfoDetail />, loader: tourInfoDetailLoader },
