@@ -1,5 +1,6 @@
 *{padding:0;margin:0;}
-body{color:#333;font-family: "Noto Sans KR", sans-serif;}
+li{list-style:none}
+body{color:#555555;font-family: "Noto Sans KR", sans-serif;}
 body .css-sjos3-MuiFormLabel-root{font-family: "Noto Sans KR", sans-serif;}
 
 /* header */
@@ -36,3 +37,31 @@ footer{background-color:#333;color:#fff;font-family:"Baloo Bhai 2", sans-serif;f
 #container.bg-main a{font-size: 30px !important;color: #fff !important;position:absolute;z-index: 2;text-decoration: none !important;background: rgba(255,255,255,0.1);padding:17px 64px;border:1px solid #fff !important;left:50%;top:50%;transform:translate(-50%, -50%)}
 
 /* mypage */
+
+/* 여행코스 */
+#container.course{padding:0}
+.course h2{color:#fff;font-size: 24px;font-weight:normal;line-height:1}
+.course .courseSummary em{width: 80px;height: 80px;color: #fff;display: flex;align-items: center;justify-content: center;background-color: #FABF13;border-radius: 50%;font-style: normal;margin-right:12px}
+.course .courseList h3{color:#333}
+.course .courseList ol {counter-reset: list-counter;padding-left: 20px; }
+.course .courseList ol li{display: flex;align-items: center;width: 100%;margin-top: 16px;counter-increment: list-counter;position: relative;}
+.course .courseList ol li::before{content: counter(list-counter);color:#333; position: absolute;left: -20px;top:50%;margin-top: -11px;}
+.course .courseList ol li p{margin-left: 13px;}
+.course .courseList ol li strong{display: block;}
+.course .courseList ol li span{font-size: 14px;}
+.course .courseList ol li img{width:80px;height:80px;border-radius:50%;}
+.course .courseList ol +h3{margin-top: 26px;}
+
+/* 나의여행 */
+#container.course.myCourse>div>div{flex-direction:row;width:100%}
+#container.course.myCourse .courseSummary{width:450px}
+#container.course.myCourse .courseSummary ul{margin-top:30px;width:100%} 
+#container.course.myCourse .courseSummary ul li{margin-top:10px} 
+#container.course.myCourse .courseSummary .MuiBox-root{height:calc(100% - 90px);}
+#container.course.myCourse .courseSummary>div>div{flex-direction:column}
+#container.course.myCourse .courseList{}
+
+
+
+
+
