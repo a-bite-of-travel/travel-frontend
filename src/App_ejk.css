@@ -21,8 +21,6 @@
 .writing_area .MuiFormControl-root > label + div p{font-size: 14px;color: red;}
 .writing_area .MuiFormControl-root > label + div.select_box{width: 30%;height: 55px;}
 .writing_area .MuiFormControl-root .inp_box .MuiInputBase-root{width: 100%;}
-
-
 .quill{height: 500px;margin-bottom: 50px;}
 .writing_area .MuiFormControl-root > label + div.quill p{color: #333;}
 .quill + p{position: absolute;top: 60px;left: 40px;font-size: 14px;}
@@ -32,29 +30,39 @@
 .btn_area{display: flex;justify-content: center;margin-top: 30px;}
 .btn_area button{width: 200px;height: 50px;font-size: 18px;}
 
-
 /* list, detail */
 .tit_h3{font-size: 30px;font-weight: 600;color: #333;}
 .list_wrap{margin-top: 45px;margin-bottom: 60px;}
 .list_area{margin: 10px 0;border-top: 1px solid #aaa;border-bottom: 1px solid #aaa;}
+.list_area li + li{border-top: 1px solid #ddd;}
+.list_area li h6{margin-bottom: 8px;}
+.list_area li div p span{display: inline-block;font-size: 8px;margin: 0 5px;vertical-align: middle;}
+.list_area li div p b{font-weight: 600;}
 .txt_total p{font-size: 24px;color: #333;}
-.txt_total strong{font-weight: 600;font-style: normal;}
+.txt_total strong{font-weight: 600;font-style: normal;color: #0fc499}
 .MuiPagination-root{display: flex;justify-content: center;}
 .MuiPagination-root .Mui-selected{color: #fff;background-color: #0fc499 !important;}
 .ditail_area{padding: 50px 0;}
 .ditail_area .tit_h4{font-size: 40px;text-align: center;font-weight: 500;}
-.ditail_area .txt_author{margin: 20px 0;text-align: right;font-size: 16px;color: #555;font-weight: 600;}
+.ditail_area .txt_author{margin: 20px 0 10px;text-align: right;font-size: 16px;color: #555;font-weight: 600;}
 .ditail_area .txt_author span{color: #888;font-weight: 400;}
+.ditail_area .txt_tags{margin: 0 0 20px;text-align: right;font-size: 16px;color: #555;font-weight: 600;}
+.ditail_area .txt_tags span{color: #888;font-weight: 400;}
+.ditail_area .txt_tags span em{font-style: normal;}
+.ditail_area .txt_tags span em + em:before{display: inline-block;content: ",";margin-right: 10px;}
 .ditail_area button{width: 200px;height: 50px;padding: 0;font-size: 18px;margin-left: 44%;margin-top: 60px;}
 .txt_content{font-size: 20px;color: #888;word-break: break-all;}
 .comment_area{margin: 0 0 50px;}
 .comment_box{background: #F0F0F0;padding: 20px;border-radius: 8px;}
 .comment_box input{height: 60px;background: #fff;font-size: 20px;color: #666;}
 .comment_box button{width: 120px;height: 91px;padding: 0;font-size: 20px;line-height: 25px;box-shadow: none;}
+.comment_area li div + p {font-size: 13px;}
+.comment_area li div span{font-weight: 600;padding-bottom: 8px;}
 .left_review li{padding: 0;}
 .left_review li h6{font-size: 24px;color: #333;margin: 15px 0;}
 .left_review li p{font-size: 16px;color: #888;}
-
+.btn_box{position: relative;}
+.btn_box .btn_delect{position: absolute;right: 0;top: 0;width: 70px;}
 
 .mt40{margin-top: 40px;}
 .mr30{margin-right: 30px;}
