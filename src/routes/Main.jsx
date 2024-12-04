@@ -44,7 +44,7 @@ export default function Main() {
                 <Grid container alignItems="center" sx={{ height: '100vh' }}>
                      <Grid item xs={12}>
                          <p>대한민국 수도서울<br/>나만의 맞춤여행을 지금 시작하세요!</p>
-                         <Link component={RouterLink} to="/" >여행하러 가기</Link>
+                         <Link component={RouterLink} to="/plan" >여행하러 가기</Link>
                      </Grid>
                 </Grid>
             </Container>

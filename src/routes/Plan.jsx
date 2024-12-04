@@ -2,6 +2,7 @@ import { useLoaderData, useActionData } from 'react-router-dom';
 import TourPlanResultMap from '../components/TourPlanResultMap';
 import TourPlanSelect from '../components/TourPlanSelect';
 import axios from 'axios';
+import Course from './Course';
 
 export default function Plan() {
     const { tourCodeList } = useLoaderData(); // loader에서 받은 데이터
@@ -11,6 +12,7 @@ export default function Plan() {
     return (
         <>
             <h1>여행일정 만들기</h1>
+            {/*<Course />*/}
             <TourPlanSelect
                 catCode={cat}
                 periodCode={period}
