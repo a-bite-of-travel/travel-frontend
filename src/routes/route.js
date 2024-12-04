@@ -2,13 +2,13 @@ import {createBrowserRouter} from 'react-router-dom';
 import RouterLayout from './RouterLayout';
 import Main from './Main';
 import Guide from '../components/Guide';
-import TourInfoList, { loader as tourInfoLoader } from './TourInfoList';
 import Plan, { loader as tourPlanLoader, action as tourPlanAction } from './Plan';
 import Login from './Login';
 import Signup from './Signup';
 import Mypage from './Mypage';
 import ReviewTour from './ReviewTour';
 import Review from './Review';
+import TourInfoList, { loader as tourInfoLoader } from './TourInfoList';
 import TourInfoDetail, { loader as tourInfoDetailLoader } from './TourInfoDetail';
 
 const router = createBrowserRouter([
