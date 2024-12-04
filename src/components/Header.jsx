@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 export default function Header() {
     // 로그인 상태 및 사용자 정보 가져오기
-    const { loginedCheck,isLoggedIn, user, logout } = useAuth();
+    const { isLoggedIn, user, logout } = useAuth();
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchorE2, setAnchorE2] = useState(null);
     const open = Boolean(anchorEl);
@@ -14,7 +14,7 @@ export default function Header() {
     const handleMenuClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
-    loginedCheck(user)
+    //loginedCheck(user)
     console.log('header',user)
 
     const handleMenuClick2 = (event) => {
@@ -61,6 +61,7 @@ export default function Header() {
                                     }}
                                     disableAutoFocusItem
                                     disableRestoreFocus
+                                    sx={{top:'10px'}}
                                 >
                                     <MenuItem onClick={handleMenuClose} component={RouterLink} to="/tour">
                                         여행지
@@ -94,6 +95,7 @@ export default function Header() {
                                     }}
                                     disableAutoFocusItem
                                     disableRestoreFocus
+                                    sx={{top:'10px'}}
                                 >
                                     <MenuItem onClick={handleMenuClose2} component={RouterLink} to="/tourinfo">
                                         리뷰 목록
@@ -102,7 +104,7 @@ export default function Header() {
                                         리뷰 작성
                                     </MenuItem>
                                 </Menu>
-                                <Link component={RouterLink} to="/guide" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>Guide</b></Link>
+                                {/* <Link component={RouterLink} to="/guide" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>Guide</b></Link> */}
                             </Stack>
                         </Grid>
                         
