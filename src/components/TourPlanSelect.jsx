@@ -32,10 +32,10 @@ export default function TourPlanSelect({ catCode, periodCode, sigunguCode }) {
 
     return (
         <>
-            <p>여행 일정 생성</p>
+            <div className='tit_box'>여행일정 만들기</div>
             <Form method="post">
                 {/* 지역 선택 */}
-                <FormControl fullWidth>
+                <FormControl fullWidth className='plan_box'>
                     <FormLabel id="sigungu-label">지역 선택</FormLabel>
                     <Select
                         labelId="sigungu-label"
@@ -54,7 +54,7 @@ export default function TourPlanSelect({ catCode, periodCode, sigunguCode }) {
                 </FormControl>
 
                 {/* 테마 선택 */}
-                <FormControl fullWidth sx={{ mt: 2 }}>
+                <FormControl fullWidth sx={{ mt: 2 }} className='plan_box'>
                     <FormLabel id="theme-label">테마 선택</FormLabel>
                     <Select
                         labelId="theme-label"
@@ -73,7 +73,7 @@ export default function TourPlanSelect({ catCode, periodCode, sigunguCode }) {
                 </FormControl>
 
                 {/* 여행 기간 선택 */}
-                <FormControl fullWidth sx={{ mt: 2 }}>
+                <FormControl fullWidth sx={{ mt: 2 }} className='plan_box'>
                     <FormLabel>여행 기간</FormLabel>
                     <RadioGroup
                         row
@@ -93,8 +93,8 @@ export default function TourPlanSelect({ catCode, periodCode, sigunguCode }) {
                 </FormControl>
 
                 {/* 제출 버튼 */}
-                <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
-                    <Button variant="contained" size="medium" type="submit">
+                <Stack direction="row" justifyContent="center" className='mt40'>
+                    <Button variant="contained" size="large" type="submit">
                         일정 생성
                     </Button>
                 </Stack>

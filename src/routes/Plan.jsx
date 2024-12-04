@@ -1,3 +1,4 @@
+import { FormControl, Grid, Box} from '@mui/material';
 import { useLoaderData, useActionData } from 'react-router-dom';
 import TourPlanResultMap from '../components/TourPlanResultMap';
 import TourPlanSelect from '../components/TourPlanSelect';
@@ -11,14 +12,28 @@ export default function Plan() {
 
     return (
         <>
-            <h1>여행일정 만들기</h1>
-            {/*<Course />*/}
-            <TourPlanSelect
-                catCode={cat}
-                periodCode={period}
-                sigunguCode={sigungu}
-            />
-            {actionData && <TourPlanResultMap data={actionData} />}
+            <Grid container id="container" className="bg-login" alignItems="center" justifyContent="center">
+                <Grid item>
+                    <Box sx={{
+                        backgroundColor: 'white',
+                        width: 600,
+                        maxWidth: '100%',
+                        padding: 4,
+                        borderRadius: 2,
+                        boxShadow: 3,
+                    }} component="form">
+                        <FormControl fullWidth>
+                            {/*<Course />*/}
+                            <TourPlanSelect
+                                catCode={cat}
+                                periodCode={period}
+                                sigunguCode={sigungu}
+                            />
+                            {actionData && <TourPlanResultMap data={actionData} />}
+                        </FormControl>
+                    </Box>
+                </Grid>
+        </Grid >
         </>
     );
 }
