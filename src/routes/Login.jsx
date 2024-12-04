@@ -45,11 +45,11 @@ export default function Login() {
                 password,
             });
             console.log('로그인 성공:', response.data);
-            const user = response.data.user
+            const user = response.data.data.user
 
             // 로그인 성공 후 토큰 저장 및 페이지 이동
-            localStorage.setItem('accessToken', response.data.accessToken);
-            localStorage.setItem('refreshToken', response.data.refreshToken);
+            localStorage.setItem('accessToken', response.data.data.accessToken);
+            localStorage.setItem('refreshToken', response.data.data.refreshToken);
 
             await loginedCheck(user)
             //triggerRefresh();
