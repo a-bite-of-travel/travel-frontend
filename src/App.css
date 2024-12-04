@@ -25,10 +25,10 @@ footer{background-color:#333;color:#fff;font-family:"Baloo Bhai 2", sans-serif;f
 .login-logo{text-align: center;}
 .login-logo img{height:23px}
 
-#container.bg-login{background: url('../public/images/bg_login.png') no-repeat;background-size: cover;height:100vh}
+#container.bg-login{background: url('../public/images/bg_login.png') no-repeat;background-size: cover;height: calc(100vh - 100px);}
 
 /* 메인 */
-#container.bg-main {position: relative;height: 100vh;overflow: hidden;} 
+#container.bg-main {position: relative;height: calc(100vh - 100px);overflow: hidden;} 
 .bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0;  transition: opacity 3s ease-in-out; }
 .bg1 { background-image: url('../public/images/bg_main01.png');}  
 .bg2 { background-image: url('../public/images/bg_main02.png');}  
@@ -59,6 +59,11 @@ footer{background-color:#333;color:#fff;font-family:"Baloo Bhai 2", sans-serif;f
 #container.course.myCourse .courseSummary ul li{margin-top:10px} 
 #container.course.myCourse .courseSummary .MuiBox-root{height:calc(100% - 90px);}
 #container.course.myCourse .courseSummary>div>div{flex-direction:column}
+
+
+/* 여행계획 */
+.tit_box{font-size: 30px;text-align: center;font-weight: 600;color: #0fc499;}
+.plan_box label{font-size: 18px;font-weight: 600;margin-top: 30px;}
 
 
 
