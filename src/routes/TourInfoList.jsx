@@ -16,6 +16,7 @@ import {
     Checkbox
 } from '@mui/material';
 import { useLoaderData, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import SubTitle from "../components/SubTitle";
 
 export default function TourInfoList() {
     const { tourCodeList, tourInfoList, totalCount } = useLoaderData();
@@ -85,88 +86,80 @@ export default function TourInfoList() {
 
     return (
         <div className="contents_wrap">
+            <SubTitle type="ty1" />
             <Container maxWidth="lg">
-                <Grid container spacing={2}>
-                    <Grid item xs={4}>
-                        <h3 className="tit_h3 mt40">추천 여행지</h3>
-                    </Grid>
-                    <Grid item xs={8}>
-                        <div className="list_wrap">
-                            <form onSubmit={handleSearchSubmit}>
-                                <Box display="flex" gap={2} alignItems="center">
-                                    <TextField
-                                        fullWidth
-                                        variant="outlined"
-                                        placeholder="검색어를 입력하세요"
-                                        value={searchText}
-                                        onChange={handleSearchChange}
-                                        size="small"
-                                    />
-                                    <Button type="submit" variant="contained" color="primary">
-                                        검색
-                                    </Button>
-                                </Box>
-                            </form>
+                <div className="list_wrap">
+                    <div className='search_box'>
+                        <form onSubmit={handleSearchSubmit}>
+                            <Box display="flex" gap={2} alignItems="center" className="search">
+                                <TextField
+                                    fullWidth
+                                    variant="outlined"
+                                    placeholder="검색어를 입력하세요"
+                                    value={searchText}
+                                    onChange={handleSearchChange}
+                                    size="small"
+                                />
+                                <Button type="submit" variant="contained" color="primary">
+                                    검색
+                                </Button>
+                            </Box>
+                        </form>
 
-                            <FormGroup row sx={{ gap: '10px', mt: 2 }}>
-                                {sigungu.map((region) => (
-                                    <FormControlLabel
-                                        key={region.code}
-                                        control={
-                                            <Checkbox
-                                                checked={selectedRegions.includes(region.code)}
-                                                onChange={() => toggleRegionSelection(region.code)}
-                                            />
-                                        }
-                                        label={region.name}
-                                    />
-                                ))}
-                            </FormGroup>
-
-                            <List>
-                                {tourInfoList.map((info) => (
-                                    <ListItem
-                                        key={info._id}
-                                        button
-                                        onClick={() => handleItemClick(info.contentid)}
-                                    >
-                                        {info.firstimage2 && (
-                                            <Box
-                                                component="img"
-                                                src={info.firstimage2}
-                                                alt={info.title}
-                                                sx={{
-                                                    width: 80,
-                                                    height: 80,
-                                                    objectFit: 'cover',
-                                                    borderRadius: 4,
-                                                    marginRight: 2,
-                                                }}
-                                            />
-                                        )}
-                                        <ListItemText
-                                            primary={<Typography variant="h6">{info.title}</Typography>}
-                                            secondary={
-                                                <Typography variant="body2" color="textSecondary" noWrap>
-                                                    {info.description || '설명이 없습니다.'}
-                                                </Typography>
-                                            }
+                        <FormGroup row className='check_box'>
+                            {sigungu.map((region) => (
+                                <FormControlLabel
+                                    key={region.code}
+                                    control={
+                                        <Checkbox
+                                            checked={selectedRegions.includes(region.code)}
+                                            onChange={() => toggleRegionSelection(region.code)}
                                         />
-                                    </ListItem>
-                                ))}
-                            </List>
+                                    }
+                                    label={region.name}
+                                />
+                            ))}
+                        </FormGroup>
+                    </div>
 
-                            <Pagination
-                                count={totalPages}
-                                page={currentPage}
-                                onChange={(event, page) => goToPage(page)}
-                                variant="outlined"
-                                color="primary"
-                                sx={{ mt: 2 }}
-                            />
-                        </div>
-                    </Grid>
-                </Grid>
+                    <List className='tour_box'>
+                        {tourInfoList.map((info) => (
+                            <ListItem
+                                key={info._id}
+                                button
+                                onClick={() => handleItemClick(info.contentid)}
+                            >
+                                {info.firstimage2 ? (
+                                    <Box
+                                        component="img"
+                                        src={info.firstimage2}
+                                        alt={info.title}
+                                        className='img_box'
+                                    />
+                                ) : (
+                                    <div className='img_normal'></div>
+                                )}
+                                <ListItemText
+                                    primary={<Typography variant="h6">{info.title}</Typography>}
+                                    secondary={
+                                        <Typography variant="body2" color="textSecondary" noWrap>
+                                            {info.description || '설명이 없습니다.'}
+                                        </Typography>
+                                    }
+                                />
+                            </ListItem>
+                        ))}
+                    </List>
+
+                    <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={(event, page) => goToPage(page)}
+                        variant="outlined"
+                        color="primary"
+                        sx={{ mt: 2 }}
+                    />
+                </div>
             </Container>
         </div>
     );
