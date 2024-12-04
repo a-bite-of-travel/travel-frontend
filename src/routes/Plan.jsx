@@ -12,13 +12,13 @@ export default function Plan() {
     return (
         <>
             <h1>여행일정 만들기</h1>
-            <Course />
-            {/*<TourPlanSelect*/}
-            {/*    catCode={cat}*/}
-            {/*    periodCode={period}*/}
-            {/*    sigunguCode={sigungu}*/}
-            {/*/>*/}
-            {/*{actionData && <TourPlanResultMap data={actionData} />}*/}
+            {/*<Course />*/}
+            <TourPlanSelect
+                catCode={cat}
+                periodCode={period}
+                sigunguCode={sigungu}
+            />
+            {actionData && <TourPlanResultMap data={actionData} />}
         </>
     );
 }
