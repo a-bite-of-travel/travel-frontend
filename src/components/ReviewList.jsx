@@ -11,7 +11,7 @@ export default function ReviewList() {
     const [selectedReview, setSelectedReview] = useState(null); // 선택된 리뷰 데이터
     const [comments, setComments] = useState([]); // 댓글 데이터
     const [newComment, setNewComment] = useState(""); // 새 댓글
-    const itemsPerPage = 7; // 한 페이지에 표시할 항목 수
+    const itemsPerPage = 4; // 한 페이지에 표시할 항목 수
     const { user } = useAuth(); // useAuth 훅을 사용하여 로그인된 사용자 정보
 
     const sanitizedContent = DOMPurify.sanitize(selectedReview?.content || "", {
