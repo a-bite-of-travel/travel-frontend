@@ -27,7 +27,7 @@ const router = createBrowserRouter([
             {path: '/review', element: <Review />}, // 후기작성
             {path: '/guide', element: <Guide />}, // 임시메뉴 Guide
             {path: '/auth/login', element: <Login />}, // 로그인
-            {path: '/auth/Signup', element: <Signup />}, // 회원가입
+            {path: '/users/Signup', element: <Signup />}, // 회원가입
         ]
     },
 ]);
