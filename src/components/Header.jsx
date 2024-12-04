@@ -5,28 +5,40 @@ import { useState } from 'react'
 
 export default function Header() {
     // 로그인 상태 및 사용자 정보 가져오기
-    const { isLoggedIn, user, logout } = useAuth();
+    const { loginedCheck,isLoggedIn, user, logout } = useAuth();
     const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorE2, setAnchorE2] = useState(null);
     const open = Boolean(anchorEl);
+    const open2 = Boolean(anchorE2);
 
     const handleMenuClick = (event) => {
         setAnchorEl(event.currentTarget);
+    };
+    loginedCheck(user)
+    console.log('header',user)
+
+    const handleMenuClick2 = (event) => {
+        setAnchorE2(event.currentTarget);
     };
 
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
+    const handleMenuClose2 = () => {
+        setAnchorE2(null);
+    };
+
 
     return (
             <header>
                 <Container maxWidth="lg">
                     <Grid container>
                         <Grid item xs sx={{ display: 'flex', alignItems: 'center' }}>
-                            <h1><Link component={RouterLink} to="/tour"><img src="images/h1_ssoulRoad.png" alt="Ssoul Road" /></Link></h1>
+                            <h1><Link component={RouterLink} to="/tour"><img src="/images/h1_ssoulRoad.png" alt="Ssoul Road" /></Link></h1>
                         </Grid>
                         <Grid item sx={{ display: 'flex', alignItems: 'center' }} className="nav">
                             <Stack spacing={10} direction="row">
-                                <Link component={RouterLink} to="/plan" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>여행계획</b></Link>
+                                <Link component={RouterLink} to="/" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>여행계획</b></Link>
                                 <Link
                                     color="inherit"
                                     underline="none"
@@ -59,8 +71,35 @@ export default function Header() {
                                     <MenuItem onClick={handleMenuClose} component={RouterLink} to="/festival">
                                         축제
                                     </MenuItem>
-                                    <MenuItem onClick={handleMenuClose} component={RouterLink} to="/review">
-                                        후기 작성
+                                </Menu>
+                                <Link
+                                    color="inherit"
+                                    underline="none"
+                                    sx={{ '&:hover': { color: 'primary.main' }, cursor: 'pointer' }}
+                                    onClick={handleMenuClick2}
+                                >
+                                    <b>리뷰</b>
+                                </Link>
+                                <Menu
+                                    anchorEl={anchorE2}
+                                    open={open2}
+                                    onClose={handleMenuClose2}
+                                    anchorOrigin={{
+                                        vertical: 'bottom', 
+                                        horizontal: 'left', 
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'top',   
+                                        horizontal: 'left', 
+                                    }}
+                                    disableAutoFocusItem
+                                    disableRestoreFocus
+                                >
+                                    <MenuItem onClick={handleMenuClose2} component={RouterLink} to="/tourinfo">
+                                        리뷰 목록
+                                    </MenuItem>
+                                    <MenuItem onClick={handleMenuClose2} component={RouterLink} to="/review">
+                                        리뷰 작성
                                     </MenuItem>
                                 </Menu>
                                 <Link component={RouterLink} to="/guide" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>Guide</b></Link>
@@ -86,7 +125,7 @@ export default function Header() {
                             // 로그인되지 않은 경우
                             <Stack spacing={1} direction="row" justifyContent="flex-end">
                                 <Link component={RouterLink} to="/auth/Login"><Button variant="text" sx={{ borderRadius: '20px' }}>Login</Button></Link>
-                                <Link component={RouterLink} to="/auth/Signup"><Button variant="contained" sx={{ borderRadius: '20px' }} size="small">Sign up</Button></Link>
+                                <Link component={RouterLink} to="/users/Signup"><Button variant="contained" sx={{ borderRadius: '20px' }} size="small">Sign up</Button></Link>
                             </Stack>
                         )}
                     </Grid>

@@ -55,11 +55,10 @@ footer{background-color:#333;color:#fff;font-family:"Baloo Bhai 2", sans-serif;f
 /* 나의여행 */
 #container.course.myCourse>div>div{flex-direction:row;width:100%}
 #container.course.myCourse .courseSummary{width:450px}
-#container.course.myCourse .courseSummary ul{margin-top:30px;width:100%} 
+#container.course.myCourse .courseSummary ul{margin-top:30px} 
 #container.course.myCourse .courseSummary ul li{margin-top:10px} 
 #container.course.myCourse .courseSummary .MuiBox-root{height:calc(100% - 90px);}
 #container.course.myCourse .courseSummary>div>div{flex-direction:column}
-#container.course.myCourse .courseList{}
 
 
 

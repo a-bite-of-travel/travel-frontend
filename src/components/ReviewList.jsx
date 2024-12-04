@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Grid, Typography, List, ListItem, ListItemText, Pagination, Button, Box, TextField } from '@mui/material';
+import axiosInstance from "../utils/axiosInstance";
+import { useAuth } from '../context/AuthContext';
+import DOMPurify from 'dompurify';
 
 export default function ReviewList() {
     const [loading, setLoading] = useState(false);
@@ -9,6 +12,19 @@ export default function ReviewList() {
     const [comments, setComments] = useState([]); // 댓글 데이터
     const [newComment, setNewComment] = useState(""); // 새 댓글
     const itemsPerPage = 7; // 한 페이지에 표시할 항목 수
+    const { user } = useAuth(); // useAuth 훅을 사용하여 로그인된 사용자 정보
+
+    const sanitizedContent = DOMPurify.sanitize(selectedReview?.content || "", {
+        ALLOWED_TAGS: [
+            'img', 'strong', 'ul', 'li', 'ol', 'div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'em', 'a'
+        ],
+        ALLOWED_ATTR: [
+            'src', 'alt', 'title', 'width', 'height', 'class', 'style', 'href', 'target'
+        ]
+    })
+
+   // 현재 로그인된 사용자가 리뷰 작성자인지 확인
+    const isAuthor = user && selectedReview && user._id === selectedReview.userId?.toString();
 
     // 날짜 포맷팅 함수
     const formatDate = (dateString) => {
@@ -32,22 +48,18 @@ export default function ReviewList() {
             day: 'numeric',
         });
     };
-
+    
     // 리뷰 목록 가져오기
     useEffect(() => {
         const fetchReviews = async () => {
             setLoading(true);
             try {
-                const response = await fetch("http://localhost:3500/review");
-                const data = await response.json();
-
-                console.log("API에서 반환된 데이터:", data);
-
-                // 객체로 반환된 데이터에서 'data' 필드가 배열인지 확인하고 설정
-                if (data && Array.isArray(data.data.review)) {
-                    setReviews(data.data.review); // `data` 객체 내의 배열에 접근
+                const response = await axiosInstance.get("/review");
+                if (response.status === 200) {
+                    console.log("API에서 반환된 데이터:", response.data);
+                    setReviews(response.data.data.review); // 서버에서 가져온 리뷰 데이터 설정
                 } else {
-                    console.error("API에서 반환된 데이터가 예상 형식이 아닙니다:", data);
+                    console.error("API에서 반환된 데이터가 예상 형식이 아닙니다:", response);
                     setReviews([]); // 예상과 다른 형식의 데이터일 경우 빈 배열로 초기화
                 }
             } catch (error) {
@@ -71,13 +83,11 @@ export default function ReviewList() {
     const handleSelectReview = async (selectedReview) => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:3500/review/${selectedReview._id}`);
-            const data = await response.json();
-
-            if (response.ok) {
-                console.log("리뷰 상세 데이터:", data);
-                setSelectedReview(data.data); // 서버에서 가져온 리뷰 데이터 설정
-                setComments(data.data.comments || []); // 댓글 데이터 설정
+            const response = await axiosInstance.get(`/review/${selectedReview._id}`);
+            if (response.status === 200) {
+                console.log("리뷰 상세 데이터:", response.data);
+                setSelectedReview(response.data.data); // 서버에서 가져온 리뷰 데이터 설정
+                setComments(response.data.data.comments || []); // 댓글 데이터 설정
             } else {
                 console.error(`리뷰 조회 실패: 상태 코드 ${response.status}`);
                 alert(`리뷰 조회에 실패했습니다. 상태 코드: ${response.status}`);
@@ -108,29 +118,13 @@ export default function ReviewList() {
         const newCommentData = { content: newComment };
 
         try {
-            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NDk1YzQ1YWRiODhhNjM0NDBhNmU0YyIsImVtYWlsIjoia2ltQHRlc3QuY29tIiwiaWF0IjoxNzMyODYxMDY5LCJleHAiOjE3MzQwNzA2Njl9.TgkJq5ezv3CHqTlb0zloa_en9o2Tk7ua932a8it072k"; // 실제 토큰을 여기에 추가하세요
-            const response = await fetch(`http://localhost:3500/review/${selectedReview._id}/comments`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}` // 토큰 추가
-                },
-                body: JSON.stringify(newCommentData),
-            });
-
-            if (!response.ok) {
-                console.error(`서버 응답 오류: 상태 코드 ${response.status}`);
-                alert(`댓글 추가에 실패했습니다. 상태 코드: ${response.status}`);
-                return;
-            }
-
-            const responseData = await response.json();
-            if (response.ok && responseData.data) {
+            const response = await axiosInstance.put(`/review/${selectedReview._id}/comments`, newCommentData);
+            if (response.status === 200) {
                 // 댓글이 성공적으로 추가된 후 서버에서 최신 댓글 목록 가져오기
                 await handleSelectReview(selectedReview);
                 setNewComment(""); // 입력 필드 초기화
             } else {
-                alert(`댓글 추가에 실패했습니다: ${responseData.error || "알 수 없는 오류"}`);
+                alert(`댓글 추가에 실패했습니다: ${response.data.error || "알 수 없는 오류"}`);
             }
         } catch (error) {
             console.error("댓글 추가 실패:", error);
@@ -141,24 +135,59 @@ export default function ReviewList() {
     // 댓글 삭제
     const handleDeleteComment = async (commentId) => {
         try {
-            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NDk1YzQ1YWRiODhhNjM0NDBhNmU0YyIsImVtYWlsIjoia2ltQHRlc3QuY29tIiwiaWF0IjoxNzMyODYxMDY5LCJleHAiOjE3MzQwNzA2Njl9.TgkJq5ezv3CHqTlb0zloa_en9o2Tk7ua932a8it072k"; // 실제 토큰을 여기에 추가하세요
-            const response = await fetch(`http://localhost:3500/review/comments/${commentId}`, {
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${token}` // 토큰 추가
-                }
-            });
-
-            if (!response.ok) {
-                console.error(`서버 응답 오류: 상태 코드 ${response.status}`);
+            const response = await axiosInstance.delete(`/review/comments/${commentId}`);
+            if (response.status === 200 || response.status === 204) {
+                // 상태 업데이트
+                setComments(comments.filter((comment) => comment._id !== commentId));
+            } else {
                 alert(`댓글 삭제에 실패했습니다. 상태 코드: ${response.status}`);
-                return;
             }
-
-            setComments(comments.filter((comment) => comment._id !== commentId));
         } catch (error) {
             console.error("댓글 삭제 실패:", error);
             alert("서버와의 연결에 실패했습니다.");
+        }
+    };
+
+    // 태그 배열을 <span>으로 감싸서 렌더링하는 함수
+    const renderTags = (tags) => {
+        if (!tags || tags.length === 0) {
+            return "태그 없음";
+        }
+        return tags.map((tag, index) => (
+            <em key={index}>
+                {tag}
+            </em>
+        ));
+    };
+
+    // 리뷰 종류를 문자열로 변환하는 함수
+    const getReviewTypeLabel = (reviewType) => {
+        switch (reviewType) {
+            case 'ty1':
+                return '여행지';
+            case 'ty2':
+                return '음식점';
+            case 'ty3':
+                return '축제';
+            default:
+                return '알 수 없음';
+        }
+    };
+
+    //리뷰 삭제
+    const handleDeleteReview = async (reviewId) => {
+        try {
+            const response = await axiosInstance.delete(`/review/${reviewId}`);
+            if (response.status === 200 || response.status === 204) {
+                alert("리뷰가 성공적으로 삭제되었습니다.");
+                setReviews((prevReviews) => prevReviews.filter((review) => review._id !== reviewId));
+                handleBackToList();
+            } else {
+                alert(`리뷰 삭제에 실패했습니다. 상태 코드: ${response.status}`);
+            }
+        } catch (error) {
+            console.error("리뷰 삭제 실패:", error);
+            alert("리뷰 삭제 중 오류가 발생했습니다.");
         }
     };
 
@@ -225,7 +254,7 @@ export default function ReviewList() {
                                                     }
                                                     secondary={
                                                         <Typography variant="body2" color="textSecondary">
-                                                            작성자: {review.nickName} | 날짜: {formatDateOnly(review.createdAt)}
+                                                            <b>작성자 : </b> {review.userName} <span> | </span> <b>작성일 : </b> {formatDateOnly(review.createdAt)}
                                                         </Typography>
                                                     }
                                                 />
@@ -252,12 +281,28 @@ export default function ReviewList() {
                         <Grid item xs={12}>
                             <div className='ditail_area'>
                                 <h4 className='tit_h4'>{selectedReview?.title || "제목 없음"}</h4>
-                                <div className='txt_author'>작성자 : <span className='mr30'>{selectedReview.nickName}</span> 
-                                                            날짜 : <span>{formatDateOnly(selectedReview.createdAt)}</span></div>
-                                <div className='txt_content'>{selectedReview.content}</div>
-                                <Button variant="contained" color="primary" onClick={handleBackToList}>
-                                    목록으로
-                                </Button>
+                                <div className='txt_author'>작성자 : <span className='mr30'>{selectedReview.userName}</span> 
+                                                            작성일 : <span>{formatDateOnly(selectedReview.createdAt)}</span></div>                                                            
+                                <div className='txt_tags'>리뷰종류 : <span className='mr30'>{getReviewTypeLabel(selectedReview.reviewType)}</span> 
+                                                            태그 : <span>{renderTags(selectedReview?.tags)}</span></div>
+                                <div className='txt_content'
+                                    dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+                                />
+                                <div className='btn_box'>
+                                    {isAuthor && (
+                                        <Button
+                                            variant="contained"
+                                            color="error"
+                                            className='btn_delect'
+                                            onClick={() => handleDeleteReview(selectedReview._id)}
+                                        >
+                                            삭제
+                                        </Button>
+                                    )}
+                                    <Button variant="contained" color="primary" onClick={handleBackToList}>
+                                        목록으로
+                                    </Button>
+                                </div>
                             </div>
                             {/* 댓글 영역 */}
                             <div className='comment_area'>
@@ -288,10 +333,10 @@ export default function ReviewList() {
                                         >
                                             <ListItemText
                                                 primary={comment.content}
-                                                secondary={`작성일: ${formatDate(comment.createdAt)}`}
+                                                secondary={`작성자 : ${comment.userName}`}
                                             />
                                             
-                                            <p>작성자 : {comment.nickName}</p>
+                                            <p>작성일 : {formatDate(comment.createdAt)}</p>
                                             <Button
                                                 size="small"
                                                 color="error"
