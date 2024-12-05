@@ -52,12 +52,12 @@ export default function TourPlanResultMap({ data }) {
     };
 
     return (
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex",width:'100%'}}>
             {/* 좌측 탭 및 여행지 목록 */}
-            <div style={{ width: "350px", padding: "10px", borderRight: "1px solid #ccc", backgroundColor: "#f9f9f9" }}>
-                <h2 style={{ color: "#ff4081", textAlign: "center", marginBottom: "20px" }}>여행 코스</h2>
+            <div style={{ width: "350px", padding: "20px", borderRight: "1px solid #ccc", backgroundColor: "#f9f9f9" }}>
+                <h2 style={{ color: "#0fc499", textAlign: "center", marginBottom: "15px" }}>여행 코스</h2>
                 {/* 여행 간단 요약 */}
-                <div style={{ marginTop: "20px", padding: "10px", border: "1px solid #ccc", borderRadius: "5px", backgroundColor: "#f9f9f9" }}>
+                <div style={{ marginTop: "15px", padding: "15px", border: "1px solid #ccc", borderRadius: "5px", backgroundColor: "#fff" }}>
                     <h3 style={{ marginBottom: "10px" }}>여행 간단 요약</h3>
                     <p style={{ fontSize: "14px", lineHeight: "1.6", marginBottom: "10px" }}>
                         {data.summary.length <= 150
@@ -65,7 +65,7 @@ export default function TourPlanResultMap({ data }) {
                             : `${data.summary.slice(0, 150)}...`}
                     </p>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-around", marginBottom: "20px" }}>
+                <div style={{ display: "flex", justifyContent: "space-around", marginBottom: "10px",border:'1px solid #ccc',borderRadius:'5px',marginTop:'40px',overflow:'hidden'}}>
                     {data.result.map((_, dayIndex) => (
                         <button
                             key={dayIndex}
@@ -74,12 +74,10 @@ export default function TourPlanResultMap({ data }) {
                                 flex: 1,
                                 padding: "10px",
                                 cursor: "pointer",
-                                backgroundColor: selectedDay === dayIndex ? "#ff4081" : "#f0f0f0",
+                                backgroundColor: selectedDay === dayIndex ? "#0fc499" : "#fff",
                                 color: selectedDay === dayIndex ? "white" : "black",
-                                border: "none",
-                                borderBottom: selectedDay === dayIndex ? "none" : "2px solid #ccc",
-                                borderRadius: "5px 5px 0 0",
-                                fontWeight: "bold"
+                                border:'0',
+                                fontWeight: "bold",
                             }}
                         >
                             {dayIndex + 1}일차
@@ -99,7 +97,7 @@ export default function TourPlanResultMap({ data }) {
                                     borderRadius: "5px",
                                     display: "flex",
                                     alignItems: "center",
-                                    backgroundColor: expandedItem === index ? "#f9f9f9" : "white",
+                                    backgroundColor: expandedItem === index ? "#0fc4991f" : "white",
                                     cursor: "pointer",
                                 }}
                             >
