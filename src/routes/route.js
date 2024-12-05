@@ -6,10 +6,11 @@ import Plan, { loader as tourPlanLoader, action as tourPlanAction } from './Plan
 import Login from './Login';
 import Signup from './Signup';
 import Mypage from './Mypage';
-import ReviewTour from './ReviewTour';
+import ReviewTour, { loader as reviewTourLoader } from './ReviewTour';
 import Review from './Review';
 import TourInfoList, { loader as tourInfoLoader } from './TourInfoList';
 import TourInfoDetail, { loader as tourInfoDetailLoader } from './TourInfoDetail';
+import ReviewTourDetail, { loader as reviewTourDetailLoader, action as reviewTourDetailAction } from './ReviewTourDetail';
 
 const router = createBrowserRouter([
     {
@@ -18,7 +19,8 @@ const router = createBrowserRouter([
         children: [
             {path: '/', element: <Main />}, // 매인
             {path: '/:userId', element: <Mypage />}, // 마이페이지
-            {path: '/tourinfo', element: <ReviewTour />}, // 여행 정보 // 여행지
+            {path: '/tourinfo', element: <ReviewTour />, loader: reviewTourLoader}, // 여행 정보 // 여행지
+            {path: '/tourinfo/:reviewId', element: <ReviewTourDetail />, loader: reviewTourDetailLoader, action: reviewTourDetailAction}, // 여행 정보 // 여행지
             {path: '/plan', element: <Plan />, loader: tourPlanLoader, action: tourPlanAction}, // 여행 게획
             {path: '/tour', element: <TourInfoList />, loader: (args) => tourInfoLoader({ ...args, type: "12" }),}, // 여행 정보
             {path: '/tour/:contentid', element: <TourInfoDetail />, loader: tourInfoDetailLoader },

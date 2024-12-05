@@ -103,7 +103,7 @@ export async function action({ request }) {
         sigunguCode: JSON.parse(formData.get('sigunguCode')),
         startDate: formData.get('startDate'), // 선택한 시작 날짜
         period: formData.get('period'),
-        theme: formData.get('theme'),
+        theme: JSON.parse(formData.get('theme')),
     };
 
     try {
