@@ -14,8 +14,11 @@ export default function Header() {
     const handleMenuClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
-    //loginedCheck(user)
+
     console.log('header',user)
+
+    const profileImage = user?.profileImage ? user.profileImage.replace(/^public[\\/]/, "/").replace(/\\/g, "/") : null;
+    //console.log('profileImage>>>>>>>>>>>>>>>>>',profileImage)
 
     const handleMenuClick2 = (event) => {
         setAnchorE2(event.currentTarget);
@@ -34,7 +37,7 @@ export default function Header() {
                 <Container maxWidth="lg">
                     <Grid container>
                         <Grid item xs sx={{ display: 'flex', alignItems: 'center' }}>
-                            <h1><Link component={RouterLink} to="/tour"><img src="/images/h1_ssoulRoad.png" alt="Ssoul Road" /></Link></h1>
+                            <h1><Link component={RouterLink} to="/"><img src="/images/h1_ssoulRoad.png" alt="Ssoul Road" /></Link></h1>
                         </Grid>
                         <Grid item sx={{ display: 'flex', alignItems: 'center' }} className="nav">
                             <Stack spacing={10} direction="row">
@@ -114,7 +117,7 @@ export default function Header() {
                             <Stack direction="row" sx={{ alignItems: 'center' }} justifyContent="flex-end">
                                 <Link color="inherit" underline="none" to={`/${user?.id}`} component={RouterLink} sx={{ '&:hover': { color: 'primary.main' }, display: 'flex', alignItems: 'center' }}>
                                     <Avatar
-                                        src={user?.profileImage ? `http://localhost:3500${user.profileImage}` : "/images/profile_default.png"} 
+                                        src={profileImage ? `http://localhost:3500${profileImage}` : "/images/profile_default.png"} 
                                         alt={user?.email || "닉네임"}
                                     />
                                     <Typography variant="body1" sx={{ marginLeft: '10px' }}>
