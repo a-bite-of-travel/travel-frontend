@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import axios from 'axios';
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
 export default function TourPlanResultMap({ data }) {
-    const [selectedDay, setSelectedDay] = useState(0); // 선택된 날짜
-    const [selectedMarker, setSelectedMarker] = useState(null); // 선택된 마커 상태
-    const [showFullSummary, setShowFullSummary] = useState(false); // 요약 확장 상태
+    const [selectedDay, setSelectedDay] = useState(0);
+    const [selectedMarker, setSelectedMarker] = useState(null);
+    const [expandedItem, setExpandedItem] = useState(null); // 현재 슬라이드가 열린 항목
+    const [expandedData, setExpandedData] = useState(null); // 슬라이드에 표시할 데이터
 
     if (!data || !data.result || data.result.length === 0) {
         return <div>Loading...</div>;
@@ -31,56 +33,43 @@ export default function TourPlanResultMap({ data }) {
 
     const center = calculateMedianCenter(selectedDayLocations);
 
-    const handleMarkerClick = (index) => {
-        if (selectedMarker === index) {
-            setSelectedMarker(null); // 이미 선택된 마커를 다시 클릭하면 닫기
+    const handleLocationClick = async (location, index) => {
+        if (expandedItem === index) {
+            // 이미 열린 슬라이드 클릭 시 닫기
+            setExpandedItem(null);
+            setExpandedData(null);
         } else {
-            setSelectedMarker(index); // 다른 마커를 클릭하면 해당 마커를 선택
+            // 새 데이터 로드 및 슬라이드 열기
+            const url = `http://localhost:3500/tour/plan/detail?x=${location.mapx}&y=${location.mapy}&title=${encodeURIComponent(location.title)}`;
+            try {
+                const response = await axios.get(url);
+                setExpandedData(response.data.data); // 데이터 저장
+                setExpandedItem(index); // 현재 선택된 항목 저장
+            } catch (error) {
+                console.error("Error fetching location details:", error);
+            }
         }
-    };
-
-    const handleDayClick = (dayIndex) => {
-        setSelectedDay(dayIndex); // 클릭한 날짜로 상태 업데이트
-        setSelectedMarker(null); // 마커 초기화
     };
 
     return (
         <div style={{ display: "flex" }}>
             {/* 좌측 탭 및 여행지 목록 */}
             <div style={{ width: "350px", padding: "10px", borderRight: "1px solid #ccc", backgroundColor: "#f9f9f9" }}>
-                <h2 style={{ color: "#ff4081", textAlign: "center", marginBottom: "20px" }}>
-                    여행 코스
-                </h2>
+                <h2 style={{ color: "#ff4081", textAlign: "center", marginBottom: "20px" }}>여행 코스</h2>
                 {/* 여행 간단 요약 */}
                 <div style={{ marginTop: "20px", padding: "10px", border: "1px solid #ccc", borderRadius: "5px", backgroundColor: "#f9f9f9" }}>
                     <h3 style={{ marginBottom: "10px" }}>여행 간단 요약</h3>
                     <p style={{ fontSize: "14px", lineHeight: "1.6", marginBottom: "10px" }}>
-                        {showFullSummary || data.summary.length <= 150
+                        {data.summary.length <= 150
                             ? data.summary
                             : `${data.summary.slice(0, 150)}...`}
                     </p>
-                    {data.summary.length > 150 && (
-                        <button
-                            onClick={() => setShowFullSummary(!showFullSummary)}
-                            style={{
-                                padding: "5px 10px",
-                                border: "none",
-                                backgroundColor: "#ff4081",
-                                color: "white",
-                                borderRadius: "5px",
-                                cursor: "pointer",
-                                fontSize: "12px",
-                            }}
-                        >
-                            {showFullSummary ? "접기" : "더보기"}
-                        </button>
-                    )}
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-around", marginBottom: "20px" }}>
                     {data.result.map((_, dayIndex) => (
                         <button
                             key={dayIndex}
-                            onClick={() => handleDayClick(dayIndex)}
+                            onClick={() => setSelectedDay(dayIndex)}
                             style={{
                                 flex: 1,
                                 padding: "10px",
@@ -100,60 +89,115 @@ export default function TourPlanResultMap({ data }) {
                 <div style={{ padding: "10px", border: "1px solid #ccc", borderRadius: "5px", backgroundColor: "white" }}>
                     <h3 style={{ marginBottom: "10px" }}>Day {selectedDay + 1}</h3>
                     {selectedDayLocations.map((location, index) => (
-                        <div
-                            key={index}
-                            style={{
-                                padding: "10px",
-                                marginBottom: "10px",
-                                border: "1px solid #e0e0e0",
-                                borderRadius: "5px",
-                                display: "flex",
-                                alignItems: "center",
-                                backgroundColor: "white",
-                            }}
-                        >
-                            {location.firstimage2 && (
-                                <img
-                                    src={location.firstimage2}
-                                    alt={location.title}
-                                    style={{
-                                        width: "60px",
-                                        height: "60px",
-                                        borderRadius: "5px",
-                                        marginRight: "10px",
-                                        objectFit: "cover",
-                                    }}
-                                />
-                            )}
-                            <div style={{ flex: 1 }}>
-                                <h4 style={{ margin: "0 0 5px 0" }}>{location.title}</h4>
-                                <p style={{ margin: 0, fontSize: "12px", color: "#555" }}>{location.addr}</p>
-                                <div>
-                                    <span
+                        <div key={index} style={{ marginBottom: "10px" }}>
+                            {/* 장소 목록 */}
+                            <div
+                                onClick={() => handleLocationClick(location, index)}
+                                style={{
+                                    padding: "10px",
+                                    border: "1px solid #e0e0e0",
+                                    borderRadius: "5px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    backgroundColor: expandedItem === index ? "#f9f9f9" : "white",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                {location.firstimage2 && (
+                                    <img
+                                        src={location.firstimage2}
+                                        alt={location.title}
                                         style={{
-                                            padding: "2px 5px",
+                                            width: "60px",
+                                            height: "60px",
                                             borderRadius: "5px",
-                                            backgroundColor: location.isParking ? "#d4edda" : "#f8d7da",
-                                            color: location.isParking ? "#155724" : "#721c24",
-                                            marginRight: "5px",
-                                            fontSize: "12px"
+                                            marginRight: "10px",
+                                            objectFit: "cover",
                                         }}
-                                    >
-                                        {location.isParking ? "주차 가능" : "주차 불가능"}
-                                    </span>
-                                    <span
-                                        style={{
-                                            padding: "2px 5px",
-                                            borderRadius: "5px",
-                                            backgroundColor: location.isOpen ? "#d4edda" : "#f8d7da",
-                                            color: location.isOpen ? "#155724" : "#721c24",
-                                            fontSize: "12px"
-                                        }}
-                                    >
-                                        {location.isOpen ? "영업 중" : "쉬는날"}
-                                    </span>
+                                    />
+                                )}
+                                <div style={{ flex: 1 }}>
+                                    <h4 style={{ margin: "0 0 5px 0" }}>{location.title}</h4>
+                                    <p style={{ margin: 0, fontSize: "12px", color: "#555" }}>{location.addr}</p>
                                 </div>
                             </div>
+
+                            {/* 슬라이드 컨텐츠 */}
+                            {expandedItem === index && expandedData && (
+                                <div
+                                    style={{
+                                        padding: "10px",
+                                        border: "1px solid #ff4081",
+                                        borderRadius: "5px",
+                                        marginTop: "5px",
+                                        backgroundColor: "#fff",
+                                        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                                        transition: "max-height 0.3s ease",
+                                    }}
+                                >
+                                    {/* 주소 */}
+                                    <p><strong>주소:</strong> {expandedData.address || "정보 없음"}</p>
+                                    {expandedData.addressNumber && (
+                                        <p><strong>지번 주소:</strong> {expandedData.addressNumber}</p>
+                                    )}
+
+                                    {/* 운영 시간 */}
+                                    <p><strong>운영 시간:</strong></p>
+                                    <ul>
+                                        {expandedData.operationHours && expandedData.operationHours.length > 0
+                                            ? expandedData.operationHours
+                                                .filter((item) => item.day || item.time)
+                                                .map((item, i) => (
+                                                    <li key={i}>
+                                                        {item.day ? `${item.day}: ` : ""}
+                                                        {item.time || "시간 정보 없음"}
+                                                    </li>
+                                                ))
+                                            : "운영 시간 정보 없음"}
+                                    </ul>
+
+                                    {/* 휴무일 */}
+                                    {expandedData.offDays && (
+                                        <p><strong>휴무일:</strong> {expandedData.offDays}</p>
+                                    )}
+
+                                    {/* 연락처 */}
+                                    {expandedData.contactNumber && (
+                                        <p><strong>연락처:</strong> {expandedData.contactNumber}</p>
+                                    )}
+                                    
+                                    {/* 시설 */}
+                                    {expandedData.facilities && expandedData.facilities.length > 0 && (
+                                        <p>
+                                            <strong>시설:</strong> {expandedData.facilities.join(", ")}
+                                        </p>
+                                    )}
+
+                                    {/* 메뉴 */}
+                                    {expandedData.menu && expandedData.menu.length > 0 && (
+                                        <div>
+                                            <p><strong>메뉴:</strong></p>
+                                            <ul>
+                                                {expandedData.menu.map((menuItem, i) => (
+                                                    <li key={i}>
+                                                        {menuItem.name} - {menuItem.price || "가격 정보 없음"}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+
+                                    {/* 평점 */}
+                                    <p>
+                                        <strong>평점:</strong> {expandedData.ratingInfo?.rating || "평점 정보 없음"}
+                                    </p>
+                                    
+                                    <p>
+                                        <strong>상세 정보 확인 :</strong> <a href={expandedData.placeUrl || "평점 정보 없음"}></a>
+                                    </p>
+                                </div>
+                            )}
+
                         </div>
                     ))}
                 </div>
@@ -161,11 +205,7 @@ export default function TourPlanResultMap({ data }) {
 
             {/* 우측 지도 */}
             <div style={{ flex: 1 }}>
-                <Map
-                    center={center} // 계산된 중심점 사용
-                    style={{ width: "100%", height: "600px" }}
-                    level={7}
-                >
+                <Map center={center} style={{ width: "100%", height: "600px" }} level={7}>
                     {selectedDayLocations.map((location, index) => (
                         <MapMarker
                             key={index}
@@ -173,7 +213,7 @@ export default function TourPlanResultMap({ data }) {
                                 lat: parseFloat(location.mapy),
                                 lng: parseFloat(location.mapx),
                             }}
-                            onClick={() => handleMarkerClick(index)}
+                            onClick={() => setSelectedMarker(index)}
                         >
                             {selectedMarker === index && (
                                 <div
