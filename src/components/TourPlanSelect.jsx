@@ -60,7 +60,6 @@ export default function TourPlanSelect({ catCode, periodCode, sigunguCode }) {
                     value={sigungu}
                     onChange={handleSigunguChange}
                     name="sigunguCode"
-                    sx={{ mt: 1 }}
                 >
                     {sigunguCode.map((sigungu) => (
                         <MenuItem key={sigungu.code} value={JSON.stringify(sigungu)}>
@@ -74,14 +73,14 @@ export default function TourPlanSelect({ catCode, periodCode, sigunguCode }) {
             <FormControl fullWidth sx={{ mt: 2 }} className="plan_box">
                 <FormLabel id="theme-label">테마 선택</FormLabel>
                 <FormGroup>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={1}>
                         {catCode.map((themeItem) => (
-                            <Grid item xs={4} key={themeItem.code}>
+                            <Grid item xs={3} key={themeItem.code}>
                                 <Box
                                     sx={{
                                         border: '1px solid #ccc',
                                         borderRadius: 2,
-                                        padding: 2,
+                                        padding: 1,
                                         textAlign: 'center',
                                         cursor: 'pointer',
                                         backgroundColor: theme.some((item) => item.code === themeItem.code)
@@ -149,8 +148,8 @@ export default function TourPlanSelect({ catCode, periodCode, sigunguCode }) {
             </FormControl>
 
             {/* 제출 버튼 */}
-            <Stack direction="row" justifyContent="center" className='mt40'>
-                <Button variant="contained" size="large" type="submit">
+            <Stack direction="row" justifyContent="center">
+                <Button variant="contained" size="large" type="submit" fullWidth sx={{mt:3}}>
                     일정 생성
                 </Button>
             </Stack>

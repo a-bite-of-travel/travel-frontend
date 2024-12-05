@@ -63,8 +63,11 @@ footer{background-color:#333;color:#fff;font-family:"Baloo Bhai 2", sans-serif;f
 
 
 /* 여행계획 */
-.tit_box{font-size: 30px;text-align: center;font-weight: 600;color: #0fc499;}
-.plan_box label{font-size: 18px;font-weight: 600;margin-top: 30px;}
+.tit_box{font-size: 30px;text-align: center;font-weight: 600;color: #0fc499;line-height:1}
+.tit_box+.plan_box{margin-top: 10px;}
+.plan_box label{font-size: 18px;font-weight: 600;margin-top: 15px;margin-bottom: 10px;}
+.plan_box div[role=radiogroup] label{margin-top:0px;margin-bottom: 0;}
+
 
 
 /* 모바일 */
@@ -72,3 +75,5 @@ footer{background-color:#333;color:#fff;font-family:"Baloo Bhai 2", sans-serif;f
     
 }
 
+/* 여행일정만들기 */
+#container.bg-tour{background: url('../public/images/bg_login.png') no-repeat;background-size: cover;min-height:100vh}
