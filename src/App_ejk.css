@@ -39,6 +39,8 @@
 .list_area li h6{margin-bottom: 8px;}
 .list_area li div p span{display: inline-block;font-size: 8px;margin: 0 5px;vertical-align: middle;}
 .list_area li div p b{font-weight: 600;}
+.list_area.ty2 li{display: block;}
+.list_area.ty2 ul + ul{border-top: 1px solid #ddd;}
 .txt_total p{font-size: 24px;color: #333;}
 .txt_total strong{font-weight: 600;font-style: normal;color: #0fc499}
 .MuiPagination-root{display: flex;justify-content: center;}

@@ -12,8 +12,12 @@ export default function ReviewList() {
     const [comments, setComments] = useState([]); // 댓글 데이터
     const [newComment, setNewComment] = useState(""); // 새 댓글
     const itemsPerPage = 4; // 한 페이지에 표시할 항목 수
-    const { user } = useAuth(); // useAuth 훅을 사용하여 로그인된 사용자 정보
-
+    const { user } = useAuth(); // 로그인된 사용자 정보 가져오기
+    
+    // 리뷰 작성자가 로그인된 사용자와 같은지 확인하는 함수
+    const isAuthor = user && selectedReview && user._id === selectedReview.userId;
+    //console.log('isAuthor', user, selectedReview )
+    console.log('isAuthor',isAuthor)
     const sanitizedContent = DOMPurify.sanitize(selectedReview?.content || "", {
         ALLOWED_TAGS: [
             'img', 'strong', 'ul', 'li', 'ol', 'div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'em', 'a'
@@ -22,9 +26,6 @@ export default function ReviewList() {
             'src', 'alt', 'title', 'width', 'height', 'class', 'style', 'href', 'target'
         ]
     })
-
-   // 현재 로그인된 사용자가 리뷰 작성자인지 확인
-    const isAuthor = user && selectedReview && user._id === selectedReview.userId?.toString();
 
     // 날짜 포맷팅 함수
     const formatDate = (dateString) => {
@@ -176,12 +177,17 @@ export default function ReviewList() {
 
     //리뷰 삭제
     const handleDeleteReview = async (reviewId) => {
+        if (!isAuthor) {
+            alert("작성자만 삭제할 수 있습니다.");
+            return;
+        }
+
         try {
             const response = await axiosInstance.delete(`/review/${reviewId}`);
             if (response.status === 200 || response.status === 204) {
                 alert("리뷰가 성공적으로 삭제되었습니다.");
+                setSelectedReview(null);
                 setReviews((prevReviews) => prevReviews.filter((review) => review._id !== reviewId));
-                handleBackToList();
             } else {
                 alert(`리뷰 삭제에 실패했습니다. 상태 코드: ${response.status}`);
             }
@@ -203,19 +209,19 @@ export default function ReviewList() {
                             <div className='left_review'>
                                 {reviews.length > 0 && (
                                     <ListItem
-                                        key={reviews[0]._id}
+                                        key={reviews[1]._id}
                                         button
-                                        onClick={() => handleSelectReview(reviews[0])}
+                                        onClick={() => handleSelectReview(reviews[1])}
                                     >
                                         <ListItemText
                                             primary={
                                                 <Typography variant="h6">
-                                                    {reviews[0].title}
+                                                    {reviews[1].title}
                                                 </Typography>
                                             }
                                             secondary={
                                                 <Typography variant="body2" color="textSecondary">
-                                                    {reviews[0].content}
+                                                    {reviews[1].content}
                                                 </Typography>
                                             }
                                         />
