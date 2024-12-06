@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
 import { ClipLoader } from "react-spinners";
+import { Button } from '@mui/material'
 
 export default function TourPlanResultMap({ data }) {
     const [selectedDay, setSelectedDay] = useState(0);
@@ -114,22 +115,26 @@ export default function TourPlanResultMap({ data }) {
     };
 
     return (
-        <div style={{ display: "flex", width: "100%", height: "600px", position: "relative" }}>
+        <div style={{ display: "flex", width: "100%", position: "relative" }}>
             {/* 좌측 패널 */}
             <div
                 style={{
                     width: "350px",
-                    padding: "10px",
+                    padding: "24px",
                     borderRight: "1px solid #ccc",
                     backgroundColor: "#f9f9f9",
                     position: "relative", // 슬라이드 박스가 이 컨테이너를 기준으로 배치됩니다
                 }}
             >
-                <h2 style={{ color: "#ff4081", textAlign: "center", marginBottom: "20px" }}>여행 코스</h2>
-                <button onClick={handleSaveTour}>여행 저장</button>
-                <p>{data.title}</p>
+                <h2 style={{ color: "#0fc499", textAlign: "center", marginBottom: "15px" }}>여행 코스</h2>
+                <div style={{display:'flex',justifyContent:"space-between",alignItems:'center'}}>
+                    <p style={{color:'#333'}}>{data.title}</p>
+                    <div style={{textAlign:"right"}}>
+                        <Button onClick={handleSaveTour}  variant="contained"  sx={{ backgroundColor: 'secondary.main' }}>여행 저장</Button>
+                    </div>
+                </div>
                 {/* 여행 간단 요약 */}
-                <div style={{ marginTop: "20px", padding: "10px", border: "1px solid #ccc", borderRadius: "5px", backgroundColor: "#f9f9f9" }}>
+                <div style={{ marginTop: "15px", padding: "15px 20px 15px 20px", border: "1px solid #ccc", borderRadius: "5px", backgroundColor: "#fff" }}>
                     <h3 style={{ marginBottom: "10px" }}>여행 간단 요약</h3>
                     <p style={{ fontSize: "14px", lineHeight: "1.6", marginBottom: "10px" }}>
                         {showFullSummary || data.summary.length <= 150
@@ -137,25 +142,27 @@ export default function TourPlanResultMap({ data }) {
                             : `${data.summary.slice(0, 150)}...`}
                     </p>
                     {data.summary.length > 150 && (
-                        <button
-                            onClick={() => setShowFullSummary(!showFullSummary)}
-                            style={{
-                                padding: "5px 10px",
-                                border: "none",
-                                backgroundColor: "#ff4081",
-                                color: "white",
-                                borderRadius: "5px",
-                                cursor: "pointer",
-                                fontSize: "12px",
-                            }}
-                        >
-                            {showFullSummary ? "접기" : "더보기"}
-                        </button>
+                        <div style={{textAlign:'right'}}>
+                            <button
+                                onClick={() => setShowFullSummary(!showFullSummary)}
+                                style={{
+                                    padding: "5px 10px",
+                                    border: "none",
+                                    backgroundColor: "#ff4081",
+                                    color: "white",
+                                    borderRadius: "5px",
+                                    cursor: "pointer",
+                                    fontSize: "12px",
+                                }}
+                            >
+                                {showFullSummary ? "접기" : "더보기"}
+                            </button>
+                        </div>
                     )}
                 </div>
 
                 {/* Day 별 버튼 */}
-                <div style={{ display: "flex", justifyContent: "space-around", marginBottom: "20px" }}>
+                <div style={{ display: "flex", justifyContent: "space-around",marginTop:'25px',border:'1px solid #ccc',borderRadius:'5px',overflow:'hidden' ,marginBottom:'8px'}} className="btnDays">
                     {data.result.map((_, dayIndex) => (
                         <button
                             key={dayIndex}
@@ -164,11 +171,9 @@ export default function TourPlanResultMap({ data }) {
                                 flex: 1,
                                 padding: "10px",
                                 cursor: "pointer",
-                                backgroundColor: selectedDay === dayIndex ? "#ff4081" : "#f0f0f0",
+                                backgroundColor: selectedDay === dayIndex ? "#0fc499" : "#fff",
                                 color: selectedDay === dayIndex ? "white" : "black",
-                                border: "none",
-                                borderBottom: selectedDay === dayIndex ? "none" : "2px solid #ccc",
-                                borderRadius: "5px 5px 0 0",
+                                border:  "0 none",
                                 fontWeight: "bold",
                             }}
                         >
@@ -219,7 +224,7 @@ export default function TourPlanResultMap({ data }) {
 
                 {/* 슬라이드 박스 */}
                 {isSlideOpen && (
-                    <div
+                    <div className="moreView"
                         style={{
                             position: "absolute",
                             top: 0,
@@ -229,7 +234,7 @@ export default function TourPlanResultMap({ data }) {
                             backgroundColor: "#ffffff",
                             color: "black",
                             overflowY: "auto",
-                            padding: "20px",
+                            padding: "50px 24px 24px",
                             boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
                             zIndex: 10,
                         }}
@@ -255,48 +260,50 @@ export default function TourPlanResultMap({ data }) {
                         </button>
                         {isLoading ? (
                             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-                                <ClipLoader color="black" size={50} />
+                                <ClipLoader color="#0fc499" size={50} />
                             </div>
                         ) : expandedData ? (
-                            <div>
+                            <div className="inner">
                                 {/* 주소 */}
-                                <p><strong>주소:</strong> {expandedData.address || "정보 없음"}</p>
+                                <p><strong>주소:</strong><span> {expandedData.address || "정보 없음"}</span></p>
                                 {expandedData.addressNumber && (
-                                    <p><strong>지번 주소:</strong> {expandedData.addressNumber}</p>
+                                    <p><strong>지번 주소:</strong> <span>{expandedData.addressNumber}</span></p>
                                 )}
                                 {/* 운영 시간 */}
-                                <p><strong>운영 시간:</strong></p>
-                                <ul>
-                                    {expandedData.operationHours && expandedData.operationHours.length > 0
-                                        ? expandedData.operationHours
-                                            .filter((item) => item.day || item.time)
-                                            .map((item, i) => (
-                                                <li key={i}>
-                                                    {item.day ? `${item.day}: ` : ""}
-                                                    {item.time || "시간 정보 없음"}
-                                                </li>
-                                            ))
-                                        : "운영 시간 정보 없음"}
-                                </ul>
+                                <p>
+                                    <strong>운영 시간:</strong>
+                                    <ul>
+                                        {expandedData.operationHours && expandedData.operationHours.length > 0
+                                            ? expandedData.operationHours
+                                                .filter((item) => item.day || item.time)
+                                                .map((item, i) => (
+                                                    <li key={i}>
+                                                        {item.day ? `${item.day}: ` : ""}
+                                                        {item.time || "시간 정보 없음"}
+                                                    </li>
+                                                ))
+                                            : "운영 시간 정보 없음"}
+                                    </ul>
+                                </p>
                                 {/* 휴무일 */}
                                 {expandedData.offDays && (
-                                    <p><strong>휴무일:</strong> {expandedData.offDays}</p>
+                                    <p><strong>휴무일:</strong><span> {expandedData.offDays}</span></p>
                                 )}
                                 {/* 연락처 */}
                                 {expandedData.contactNumber && (
-                                    <p><strong>연락처:</strong> {expandedData.contactNumber}</p>
+                                    <p><strong>연락처:</strong> <span>{expandedData.contactNumber}</span></p>
                                 )}
 
                                 {/* 시설 */}
                                 {expandedData.facilities && expandedData.facilities.length > 0 && (
                                     <p>
-                                        <strong>시설:</strong> {expandedData.facilities.join(", ")}
+                                        <strong>시설:</strong> <span>{expandedData.facilities.join(", ")}</span>
                                     </p>
                                 )}
                                 {/* 메뉴 */}
                                 {expandedData.menu && expandedData.menu.length > 0 && (
-                                    <div>
-                                        <p><strong>메뉴:</strong></p>
+                                    <p>
+                                        <strong>메뉴:</strong>
                                         <ul>
                                             {expandedData.menu.map((menuItem, i) => (
                                                 <li key={i}>
@@ -304,19 +311,19 @@ export default function TourPlanResultMap({ data }) {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </p>
                                 )}
                                 {/* 평점 */}
                                 <p>
-                                    <strong>평점:</strong> {expandedData.ratingInfo?.rating || "평점 정보 없음"}
+                                    <strong>평점:</strong><span> <span>{expandedData.ratingInfo?.rating || "평점 정보 없음"}</span></span>
                                 </p>
 
-                                <p>
+                                <div style={{textAlign:'right',marginTop:'24px'}}>
                                     <a href={expandedData.placeUrl} target="_blank" rel="noopener noreferrer">
                                         <strong>상세 정보 확인</strong>
                                     </a>
 
-                                </p>
+                                </div>
                             </div>
                         ) : (
                             <div>데이터를 불러오지 못했습니다.</div>

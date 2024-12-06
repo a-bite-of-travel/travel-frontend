@@ -56,7 +56,7 @@ export default function Plan() {
                         sx={{
                             backgroundColor: '#fff',
                             padding: 0,
-                            width: '1200px',
+                            width: '1152px',
                             borderRadius: 2,
                             boxShadow: 3,
                             mr:3,
