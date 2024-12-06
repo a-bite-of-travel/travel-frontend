@@ -8,8 +8,10 @@ export default function Header() {
     const { isLoggedIn, user, logout } = useAuth();
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchorE2, setAnchorE2] = useState(null);
+    const [anchorE3, setAnchorE3] = useState(null);
     const open = Boolean(anchorEl);
     const open2 = Boolean(anchorE2);
+    const open3 = Boolean(anchorE3);
 
     const handleMenuClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -24,11 +26,18 @@ export default function Header() {
         setAnchorE2(event.currentTarget);
     };
 
+    const handleMenuClick3 = (event) => {
+        setAnchorE3(event.currentTarget);
+    };
+
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
     const handleMenuClose2 = () => {
         setAnchorE2(null);
+    };
+    const handleMenuClose3 = () => {
+        setAnchorE3(null);
     };
 
 
@@ -41,7 +50,33 @@ export default function Header() {
                         </Grid>
                         <Grid item sx={{ display: 'flex', alignItems: 'center' }} className="nav">
                             <Stack spacing={10} direction="row">
-                                <Link component={RouterLink} to="/" color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>여행계획</b></Link>
+                                <Link onClick={handleMenuClick3} color="inherit" underline="none" sx={{ '&:hover': { color: 'primary.main' } }}><b>여행계획</b></Link>
+                                <Menu
+                                    anchorEl={anchorE3}
+                                    open={open3}
+                                    onClose={handleMenuClose3}
+                                    anchorOrigin={{
+                                        vertical: 'bottom', 
+                                        horizontal: 'left', 
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'top',   
+                                        horizontal: 'left', 
+                                    }}
+                                    disableAutoFocusItem
+                                    disableRestoreFocus
+                                    sx={{top:'10px'}}
+                                >
+                                    <MenuItem onClick={handleMenuClose3} component={RouterLink} to="/plan">
+                                        여행계획 하기
+                                    </MenuItem>
+                                    <MenuItem onClick={handleMenuClose3} component={RouterLink} to="/">
+                                        여행계획 결과
+                                    </MenuItem>
+                                    <MenuItem onClick={handleMenuClose3} component={RouterLink} to="/">
+                                        나의 여행
+                                    </MenuItem>
+                                </Menu>
                                 <Link
                                     color="inherit"
                                     underline="none"
@@ -129,7 +164,7 @@ export default function Header() {
                         ) : (
                             // 로그인되지 않은 경우
                             <Stack spacing={1} direction="row" justifyContent="flex-end">
-                                <Link component={RouterLink} to="/auth/Login"><Button variant="text" sx={{ borderRadius: '20px' }}>Login</Button></Link>
+                                <Link component={RouterLink} to="/auth/Login"><Button variant="text" sx={{ borderRadius: '20px' }} size="small">Login</Button></Link>
                                 <Link component={RouterLink} to="/users/Signup"><Button variant="contained" sx={{ borderRadius: '20px' }} size="small">Sign up</Button></Link>
                             </Stack>
                         )}

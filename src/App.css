@@ -63,11 +63,11 @@ footer{background-color:#333;color:#fff;font-family:"Baloo Bhai 2", sans-serif;f
 
 
 /* 여행계획 */
-.tit_box{font-size: 30px;text-align: center;font-weight: 600;color: #0fc499;line-height:1}
+.tit_box{font-size: 26px;text-align: center;font-weight: 600;color: #0fc499;line-height:1}
 .tit_box+.plan_box{margin-top: 10px;}
-.plan_box label{font-size: 18px;font-weight: 600;margin-top: 15px;margin-bottom: 10px;}
+.plan_box label{font-size: 16px;font-weight: 600;margin-top: 5px;margin-bottom: 5px;}
 .plan_box div[role=radiogroup] label{margin-top:0px;margin-bottom: 0;}
-
+.plan_box .MuiGrid-root p{font-size: 14px;}
 
 
 /* 모바일 */
@@ -77,3 +77,21 @@ footer{background-color:#333;color:#fff;font-family:"Baloo Bhai 2", sans-serif;f
 
 /* 여행일정만들기 */
 #container.bg-tour{background: url('../public/images/bg_login.png') no-repeat;background-size: cover;min-height:100vh}
+
+/* 나의 여행일정 */
+.myPlan .tour_box li{ cursor:default;width:100%;display:flex;}
+.myPlan .tour_box li img{width: 250px;}
+.myPlan .tour_box li>div{margin-left: 16px;}
+
+.MuiChip-root.MuiChip-filled span{color:#fff}
+.MuiChip-colorThema1{background-color:#0aa678  !important; }
+.MuiChip-colorThema2{background-color:#0fa0c4  !important}
+.MuiChip-colorThema3{background-color:#13c4c8   !important}
+.MuiChip-colorThema4{background-color:#2ecc71   !important}
+.MuiChip-colorThema5{background-color:#00bfa6   !important}
+.MuiChip-colorThema6{background-color:#ffb74d   !important}
+.MuiChip-colorThema7{background-color:#ff7043   !important}
+.MuiChip-colorThema8{background-color:#ffc107   !important}
+.MuiChip-colorThema8{background-color:#8e44ad   !important}
+.MuiChip-colorThema10{background-color:#f06292   !important}
+.MuiChip-colorThema11{background-color:#e57373   !important}
