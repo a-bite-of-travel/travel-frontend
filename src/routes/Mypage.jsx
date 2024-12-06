@@ -17,10 +17,8 @@ export default function Mypage() {
     const { user } = useAuth();
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
-    
-    
+
     const profileImage = user?.profileImage ? user.profileImage.replace(/^public[\\/]/, "/").replace(/\\/g, "/") : null;
-    console.log('user >>>>>>>>>>>>>>>> ', user);
     useEffect(() => {
         const fetchReviews = async () => {
             setLoading(true);
@@ -69,13 +67,13 @@ export default function Mypage() {
                     </Grid>
                 </Container>
             </Container>
-            
+
             <Container maxWidth="lg">
                 <h3 className="mt40">내가 작성한 리뷰목록</h3>
                 <div className='list_area ty2'>
                     {loading ? (
-                        <CircularProgress sx={{ margin: '20px auto' }} />
-                    ) : reviews.length > 0 ? (
+                        <CircularProgress sx={{margin: '20px auto'}}/>
+                    ) : Array.isArray(reviews) && reviews.length > 0 ? (
                         <List>
                             {reviews.map((review) => (
                                 <ListItem key={review.id} className="review-item">
@@ -89,7 +87,7 @@ export default function Mypage() {
                             ))}
                         </List>
                     ) : (
-                        <Typography variant="body2" sx={{ marginTop: 2,pt:2,pb:3,textAlign:'center' }}>
+                        <Typography variant="body2" sx={{marginTop: 2, pt: 2, pb: 3, textAlign: 'center'}}>
                             작성한 리뷰가 없습니다.
                         </Typography>
                     )}
