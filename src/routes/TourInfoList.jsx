@@ -90,7 +90,7 @@ export default function TourInfoList() {
             <Container maxWidth="lg">
                 <div className="list_wrap">
                     <div className='search_box'>
-                        <form onSubmit={handleSearchSubmit}>
+                        <form onSubmit={handleSearchSubmit} style={{display:'flex',justifyContent:'center'}}>
                             <Box display="flex" gap={2} alignItems="center" className="search">
                                 <TextField
                                     fullWidth

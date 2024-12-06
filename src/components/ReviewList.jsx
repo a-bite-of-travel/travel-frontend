@@ -39,19 +39,19 @@ export default function ReviewList({reviews}) {
                     <div className='left_review'>
                         {reviews.length > 0 && (
                             <ListItem
-                                key={reviews[1]._id}
+                                key={reviews[0]?._id}
                                 button
-                                onClick={() => handleItemClick(reviews[1]._id)}
+                                onClick={() => handleItemClick(reviews[0]?._id)}
                             >
                                 <ListItemText
                                     primary={
                                         <Typography variant="h6">
-                                            {reviews[1].title}
+                                            {reviews[0]?.title}
                                         </Typography>
                                     }
                                     secondary={
                                         <Typography variant="body2" color="textSecondary">
-                                            {reviews[1].content}
+                                            {reviews[0]?.content}
                                         </Typography>
                                     }
                                 />

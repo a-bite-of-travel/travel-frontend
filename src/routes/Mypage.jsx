@@ -18,6 +18,8 @@ export default function Mypage() {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     
+    
+    const profileImage = user?.profileImage ? user.profileImage.replace(/^public[\\/]/, "/").replace(/\\/g, "/") : null;
     console.log('user >>>>>>>>>>>>>>>> ', user);
     useEffect(() => {
         const fetchReviews = async () => {
@@ -51,7 +53,7 @@ export default function Mypage() {
                     <Grid container alignItems="center" spacing={4} className="top">
                         <Grid item>
                             <Avatar
-                                src={user?.profileImage ? `http://localhost:3500${user.profileImage}` : "/images/profile_default.png"}
+                                src={profileImage ? `http://localhost:3500${profileImage}` : "/images/profile_default.png"}
                                 alt={user?.nickName}
                                 sx={{ width: 100, height: 100 }}
                             />
@@ -87,7 +89,7 @@ export default function Mypage() {
                             ))}
                         </List>
                     ) : (
-                        <Typography variant="body2" sx={{ marginTop: 2 }}>
+                        <Typography variant="body2" sx={{ marginTop: 2,pt:2,pb:3,textAlign:'center' }}>
                             작성한 리뷰가 없습니다.
                         </Typography>
                     )}

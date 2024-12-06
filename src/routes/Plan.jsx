@@ -31,46 +31,53 @@ export default function Plan() {
         <Grid
             container
             id="container"
-            className="bg-login"
+            className="bg-tour"
             alignItems="center"
             justifyContent="center"
-            style={{ minHeight: '100vh', padding: '20px' }}
         >
-            <Grid item xs={12} md={10} lg={8}>
+            <Grid item>
                 {isLoading ? (
                     /* 로딩 화면 */
-                    <Box sx={{ textAlign: 'center', mt: 4 }}>
+                    <Box sx={{
+                            backgroundColor: 'white',
+                            maxWidth: '100%',
+                            padding: 3,
+                            borderRadius: 2,
+                            boxShadow: 3,
+                            textAlign:'center'
+                        }}
+                    >
                         <ClipLoader color="#36d7b7" size={50} />
                         <Typography sx={{ mt: 2 }}>데이터를 불러오는 중입니다...</Typography>
                     </Box>
                 ) : actionData ? (
                     /* 결과 화면 */
-                    <Box
+                    <Grid
                         sx={{
-                            backgroundColor: 'white',
-                            width: '100%',
-                            maxWidth: '1400px', // 결과 화면을 더 크게
-                            minHeight: '800px', // 충분한 높이
-                            margin: 'auto', // 화면 중앙 정렬
-                            padding: 4,
+                            backgroundColor: '#fff',
+                            padding: 0,
+                            width: '1200px',
                             borderRadius: 2,
                             boxShadow: 3,
+                            mr:3,
+                            ml:3,
+                            overflow:'hidden'
                         }}
                     >
                         <TourPlanResultMap data={actionData} />
-                    </Box>
+                    </Grid>
                 ) : (
                     /* 입력 폼 */
                     <Box
                         sx={{
                             backgroundColor: 'white',
-                            width: '100%',
-                            maxWidth: '700px', // 입력 화면 크기를 조금 더 넓게
+                            maxWidth: 500,
                             minHeight: '500px',
-                            margin: 'auto', // 화면 중앙 정렬
                             padding: 4,
                             borderRadius: 2,
                             boxShadow: 3,
+                            mr:3,
+                            ml:3
                         }}
                     >
                         <Form method="post" onSubmit={handleSubmit}>
