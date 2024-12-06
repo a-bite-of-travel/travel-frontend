@@ -1,12 +1,17 @@
 import React, { useState } from "react";
-import axios from 'axios';
-import { Map, MapMarker } from "react-kakao-maps-sdk";
+import axios from "axios";
+import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
+import { ClipLoader } from "react-spinners";
 
 export default function TourPlanResultMap({ data }) {
     const [selectedDay, setSelectedDay] = useState(0);
+
     const [selectedMarker, setSelectedMarker] = useState(null);
     const [expandedItem, setExpandedItem] = useState(null); // 현재 슬라이드가 열린 항목
     const [expandedData, setExpandedData] = useState(null); // 슬라이드에 표시할 데이터
+    const [isSlideOpen, setIsSlideOpen] = useState(false); // 파란색 박스 슬라이드 상태
+    const [isLoading, setIsLoading] = useState(false); // 로딩 상태
+    const [showFullSummary, setShowFullSummary] = useState(false);
 
     if (!data || !data.result || data.result.length === 0) {
         return <div>Loading...</div>;
@@ -14,7 +19,6 @@ export default function TourPlanResultMap({ data }) {
 
     const selectedDayLocations = data.result[selectedDay] || [];
 
-    // 중심점 계산 함수
     const calculateMedianCenter = (locations) => {
         if (!locations || locations.length === 0) {
             return { lat: 37.5665, lng: 126.978 }; // 기본값 (서울)
@@ -34,38 +38,124 @@ export default function TourPlanResultMap({ data }) {
     const center = calculateMedianCenter(selectedDayLocations);
 
     const handleLocationClick = async (location, index) => {
-        if (expandedItem === index) {
+        if (expandedItem === index && isSlideOpen) {
             // 이미 열린 슬라이드 클릭 시 닫기
             setExpandedItem(null);
             setExpandedData(null);
+            setIsSlideOpen(false);
         } else {
-            // 새 데이터 로드 및 슬라이드 열기
+            // 로딩 시작
+            setIsLoading(true);
+            setExpandedItem(index);
+            setIsSlideOpen(true);
+
+            // 새 데이터 로드
             const url = `http://localhost:3500/tour/plan/detail?x=${location.mapx}&y=${location.mapy}&title=${encodeURIComponent(location.title)}`;
             try {
                 const response = await axios.get(url);
                 setExpandedData(response.data.data); // 데이터 저장
-                setExpandedItem(index); // 현재 선택된 항목 저장
             } catch (error) {
                 console.error("Error fetching location details:", error);
+                setExpandedData(null);
+            } finally {
+                // 로딩 종료
+                setIsLoading(false);
             }
         }
     };
 
+    const handleMarkerClick = (index) => {
+        if (selectedMarker === index) {
+            // 이미 선택된 마커를 다시 클릭하면 닫기
+            setSelectedMarker(null);
+        } else {
+            // 다른 마커를 클릭하면 해당 마커를 선택
+            setSelectedMarker(index);
+        }
+    };
+
+    const polylinePath = selectedDayLocations.map((location) => ({
+        lat: parseFloat(location.mapy),
+        lng: parseFloat(location.mapx),
+    }));
+
+    const handleOutsideClick = () => {
+        setIsSlideOpen(false); // 슬라이드 닫기
+        setExpandedItem(null);
+        setExpandedData(null);
+        setIsLoading(false);
+    };
+
+    const handleSaveTour = async () => {
+
+        const requestData = {
+            startDate: data.startDate,
+            period: data.period,
+            theme: data.theme,
+            contentid: data.result.map((day) =>
+                day.map((location) => (location.contentid))
+            ),
+            title: data.title
+        };
+
+        try {
+            // POST 요청을 보냅니다.
+            const response = await axios.post("http://localhost:3500/tour/plan", requestData);
+
+            if (response.status === 201) {
+                alert("여행이 성공적으로 저장되었습니다!");
+            } else {
+                alert("여행 저장 중 문제가 발생했습니다.");
+            }
+        } catch (error) {
+            console.error("Error saving tour plan:", error);
+            alert("여행 저장 중 에러가 발생했습니다.");
+        }
+    };
+
     return (
-        <div style={{ display: "flex",width:'100%'}}>
-            {/* 좌측 탭 및 여행지 목록 */}
-            <div style={{ width: "350px", padding: "20px", borderRight: "1px solid #ccc", backgroundColor: "#f9f9f9" }}>
-                <h2 style={{ color: "#0fc499", textAlign: "center", marginBottom: "15px" }}>여행 코스</h2>
+        <div style={{ display: "flex", width: "100%", height: "600px", position: "relative" }}>
+            {/* 좌측 패널 */}
+            <div
+                style={{
+                    width: "350px",
+                    padding: "10px",
+                    borderRight: "1px solid #ccc",
+                    backgroundColor: "#f9f9f9",
+                    position: "relative", // 슬라이드 박스가 이 컨테이너를 기준으로 배치됩니다
+                }}
+            >
+                <h2 style={{ color: "#ff4081", textAlign: "center", marginBottom: "20px" }}>여행 코스</h2>
+                <button onClick={handleSaveTour}>여행 저장</button>
+                <p>{data.title}</p>
                 {/* 여행 간단 요약 */}
-                <div style={{ marginTop: "15px", padding: "15px", border: "1px solid #ccc", borderRadius: "5px", backgroundColor: "#fff" }}>
+                <div style={{ marginTop: "20px", padding: "10px", border: "1px solid #ccc", borderRadius: "5px", backgroundColor: "#f9f9f9" }}>
                     <h3 style={{ marginBottom: "10px" }}>여행 간단 요약</h3>
                     <p style={{ fontSize: "14px", lineHeight: "1.6", marginBottom: "10px" }}>
-                        {data.summary.length <= 150
+                        {showFullSummary || data.summary.length <= 150
                             ? data.summary
                             : `${data.summary.slice(0, 150)}...`}
                     </p>
+                    {data.summary.length > 150 && (
+                        <button
+                            onClick={() => setShowFullSummary(!showFullSummary)}
+                            style={{
+                                padding: "5px 10px",
+                                border: "none",
+                                backgroundColor: "#ff4081",
+                                color: "white",
+                                borderRadius: "5px",
+                                cursor: "pointer",
+                                fontSize: "12px",
+                            }}
+                        >
+                            {showFullSummary ? "접기" : "더보기"}
+                        </button>
+                    )}
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-around", marginBottom: "10px",border:'1px solid #ccc',borderRadius:'5px',marginTop:'40px',overflow:'hidden'}}>
+
+                {/* Day 별 버튼 */}
+                <div style={{ display: "flex", justifyContent: "space-around", marginBottom: "20px" }}>
                     {data.result.map((_, dayIndex) => (
                         <button
                             key={dayIndex}
@@ -74,9 +164,11 @@ export default function TourPlanResultMap({ data }) {
                                 flex: 1,
                                 padding: "10px",
                                 cursor: "pointer",
-                                backgroundColor: selectedDay === dayIndex ? "#0fc499" : "#fff",
+                                backgroundColor: selectedDay === dayIndex ? "#ff4081" : "#f0f0f0",
                                 color: selectedDay === dayIndex ? "white" : "black",
-                                border:'0',
+                                border: "none",
+                                borderBottom: selectedDay === dayIndex ? "none" : "2px solid #ccc",
+                                borderRadius: "5px 5px 0 0",
                                 fontWeight: "bold",
                             }}
                         >
@@ -84,126 +176,165 @@ export default function TourPlanResultMap({ data }) {
                         </button>
                     ))}
                 </div>
+
+                {/* Day별 여행지 목록 */}
                 <div style={{ padding: "10px", border: "1px solid #ccc", borderRadius: "5px", backgroundColor: "white" }}>
                     <h3 style={{ marginBottom: "10px" }}>Day {selectedDay + 1}</h3>
                     {selectedDayLocations.map((location, index) => (
-                        <div key={index} style={{ marginBottom: "10px" }}>
-                            {/* 장소 목록 */}
-                            <div
-                                onClick={() => handleLocationClick(location, index)}
-                                style={{
-                                    padding: "10px",
-                                    border: "1px solid #e0e0e0",
-                                    borderRadius: "5px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    backgroundColor: expandedItem === index ? "#0fc4991f" : "white",
-                                    cursor: "pointer",
-                                }}
-                            >
-                                {location.firstimage2 && (
-                                    <img
-                                        src={location.firstimage2}
-                                        alt={location.title}
-                                        style={{
-                                            width: "60px",
-                                            height: "60px",
-                                            borderRadius: "5px",
-                                            marginRight: "10px",
-                                            objectFit: "cover",
-                                        }}
-                                    />
-                                )}
-                                <div style={{ flex: 1 }}>
-                                    <h4 style={{ margin: "0 0 5px 0" }}>{location.title}</h4>
-                                    <p style={{ margin: 0, fontSize: "12px", color: "#555" }}>{location.addr}</p>
-                                </div>
-                            </div>
-
-                            {/* 슬라이드 컨텐츠 */}
-                            {expandedItem === index && expandedData && (
-                                <div
+                        <div
+                            key={index}
+                            onClick={() => handleLocationClick(location, index)}
+                            style={{
+                                padding: "10px",
+                                border: "1px solid #e0e0e0",
+                                borderRadius: "5px",
+                                marginBottom: "10px",
+                                backgroundColor: expandedItem === index ? "#f9f9f9" : "white",
+                                cursor: "pointer",
+                                display: "flex", // 썸네일과 텍스트를 나란히 배치
+                                alignItems: "center",
+                            }}
+                        >
+                            {/* 썸네일 이미지 */}
+                            {location.firstimage2 && (
+                                <img
+                                    src={location.firstimage2}
+                                    alt={location.title}
                                     style={{
-                                        padding: "10px",
-                                        border: "1px solid #ff4081",
+                                        width: "60px",
+                                        height: "60px",
                                         borderRadius: "5px",
-                                        marginTop: "5px",
-                                        backgroundColor: "#fff",
-                                        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                                        transition: "max-height 0.3s ease",
+                                        marginRight: "10px",
+                                        objectFit: "cover",
                                     }}
-                                >
-                                    {/* 주소 */}
-                                    <p><strong>주소:</strong> {expandedData.address || "정보 없음"}</p>
-                                    {expandedData.addressNumber && (
-                                        <p><strong>지번 주소:</strong> {expandedData.addressNumber}</p>
-                                    )}
-
-                                    {/* 운영 시간 */}
-                                    <p><strong>운영 시간:</strong></p>
-                                    <ul>
-                                        {expandedData.operationHours && expandedData.operationHours.length > 0
-                                            ? expandedData.operationHours
-                                                .filter((item) => item.day || item.time)
-                                                .map((item, i) => (
-                                                    <li key={i}>
-                                                        {item.day ? `${item.day}: ` : ""}
-                                                        {item.time || "시간 정보 없음"}
-                                                    </li>
-                                                ))
-                                            : "운영 시간 정보 없음"}
-                                    </ul>
-
-                                    {/* 휴무일 */}
-                                    {expandedData.offDays && (
-                                        <p><strong>휴무일:</strong> {expandedData.offDays}</p>
-                                    )}
-
-                                    {/* 연락처 */}
-                                    {expandedData.contactNumber && (
-                                        <p><strong>연락처:</strong> {expandedData.contactNumber}</p>
-                                    )}
-                                    
-                                    {/* 시설 */}
-                                    {expandedData.facilities && expandedData.facilities.length > 0 && (
-                                        <p>
-                                            <strong>시설:</strong> {expandedData.facilities.join(", ")}
-                                        </p>
-                                    )}
-
-                                    {/* 메뉴 */}
-                                    {expandedData.menu && expandedData.menu.length > 0 && (
-                                        <div>
-                                            <p><strong>메뉴:</strong></p>
-                                            <ul>
-                                                {expandedData.menu.map((menuItem, i) => (
-                                                    <li key={i}>
-                                                        {menuItem.name} - {menuItem.price || "가격 정보 없음"}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
-
-                                    {/* 평점 */}
-                                    <p>
-                                        <strong>평점:</strong> {expandedData.ratingInfo?.rating || "평점 정보 없음"}
-                                    </p>
-                                    
-                                    <p>
-                                        <strong>상세 정보 확인 :</strong> <a href={expandedData.placeUrl || "평점 정보 없음"}></a>
-                                    </p>
-                                </div>
+                                />
                             )}
-
+                            <div style={{ flex: 1 }}>
+                                <h4 style={{ margin: "0 0 5px 0" }}>{location.title}</h4>
+                                <p style={{ margin: 0, fontSize: "12px", color: "#555" }}>{location.addr}</p>
+                            </div>
                         </div>
                     ))}
                 </div>
+
+                {/* 슬라이드 박스 */}
+                {isSlideOpen && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: 0,
+                            left: "100%", // 목록 바로 옆에 붙도록 설정
+                            width: "300px",
+                            height: "100%",
+                            backgroundColor: "#ffffff",
+                            color: "black",
+                            overflowY: "auto",
+                            padding: "20px",
+                            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                            zIndex: 10,
+                        }}
+                    >
+                        <button
+                            onClick={handleOutsideClick}
+                            style={{
+                                position: "absolute",
+                                top: "10px",
+                                right: "10px",
+                                backgroundColor: "white",
+                                border: "none",
+                                borderRadius: "50%",
+                                width: "30px",
+                                height: "30px",
+                                cursor: "pointer",
+                                fontSize: "16px",
+                                fontWeight: "bold",
+                                textAlign: "center",
+                            }}
+                        >
+                            ×
+                        </button>
+                        {isLoading ? (
+                            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+                                <ClipLoader color="black" size={50} />
+                            </div>
+                        ) : expandedData ? (
+                            <div>
+                                {/* 주소 */}
+                                <p><strong>주소:</strong> {expandedData.address || "정보 없음"}</p>
+                                {expandedData.addressNumber && (
+                                    <p><strong>지번 주소:</strong> {expandedData.addressNumber}</p>
+                                )}
+                                {/* 운영 시간 */}
+                                <p><strong>운영 시간:</strong></p>
+                                <ul>
+                                    {expandedData.operationHours && expandedData.operationHours.length > 0
+                                        ? expandedData.operationHours
+                                            .filter((item) => item.day || item.time)
+                                            .map((item, i) => (
+                                                <li key={i}>
+                                                    {item.day ? `${item.day}: ` : ""}
+                                                    {item.time || "시간 정보 없음"}
+                                                </li>
+                                            ))
+                                        : "운영 시간 정보 없음"}
+                                </ul>
+                                {/* 휴무일 */}
+                                {expandedData.offDays && (
+                                    <p><strong>휴무일:</strong> {expandedData.offDays}</p>
+                                )}
+                                {/* 연락처 */}
+                                {expandedData.contactNumber && (
+                                    <p><strong>연락처:</strong> {expandedData.contactNumber}</p>
+                                )}
+
+                                {/* 시설 */}
+                                {expandedData.facilities && expandedData.facilities.length > 0 && (
+                                    <p>
+                                        <strong>시설:</strong> {expandedData.facilities.join(", ")}
+                                    </p>
+                                )}
+                                {/* 메뉴 */}
+                                {expandedData.menu && expandedData.menu.length > 0 && (
+                                    <div>
+                                        <p><strong>메뉴:</strong></p>
+                                        <ul>
+                                            {expandedData.menu.map((menuItem, i) => (
+                                                <li key={i}>
+                                                    {menuItem.name} - {menuItem.price || "가격 정보 없음"}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                                {/* 평점 */}
+                                <p>
+                                    <strong>평점:</strong> {expandedData.ratingInfo?.rating || "평점 정보 없음"}
+                                </p>
+
+                                <p>
+                                    <a href={expandedData.placeUrl} target="_blank" rel="noopener noreferrer">
+                                        <strong>상세 정보 확인</strong>
+                                    </a>
+
+                                </p>
+                            </div>
+                        ) : (
+                            <div>데이터를 불러오지 못했습니다.</div>
+                        )}
+                    </div>
+                )}
             </div>
 
-            {/* 우측 지도 */}
+            {/* 지도 */}
             <div style={{ flex: 1 }}>
-                <Map center={center} style={{ width: "100%", height: "600px" }} level={7}>
+                <Map center={center} style={{ width: "100%", height: "100%" }} level={6}>
+                    <Polyline
+                        path={[polylinePath]}
+                        strokeWeight={5}
+                        strokeColor="#ff4081"
+                        strokeOpacity={0.8}
+                        strokeStyle="solid"
+                    />
                     {selectedDayLocations.map((location, index) => (
                         <MapMarker
                             key={index}
@@ -211,7 +342,7 @@ export default function TourPlanResultMap({ data }) {
                                 lat: parseFloat(location.mapy),
                                 lng: parseFloat(location.mapx),
                             }}
-                            onClick={() => setSelectedMarker(index)}
+                            onClick={() => handleMarkerClick(index)}
                         >
                             {selectedMarker === index && (
                                 <div
@@ -225,13 +356,6 @@ export default function TourPlanResultMap({ data }) {
                                 >
                                     <h4>{location.title}</h4>
                                     <p>{location.addr}</p>
-                                    {location.firstimage2 && (
-                                        <img
-                                            src={location.firstimage2}
-                                            alt={location.title}
-                                            style={{ width: "100px", height: "100px" }}
-                                        />
-                                    )}
                                 </div>
                             )}
                         </MapMarker>
