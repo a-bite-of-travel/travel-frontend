@@ -6,11 +6,13 @@ import reportWebVitals from './reportWebVitals';
 import router from './routes/route';
 import { RouterProvider } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { AuthProvider } from "./context/AuthContext";
+import { AppProvider } from "./context/AppContext";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#0082FF', //blue
+      main: '#0fc499', //그린오로라
     },
     secondary: {
       main: '#FF0A73', //pink
@@ -25,8 +27,43 @@ const theme = createTheme({
       main: '#888',
     },
     lightGray: {
-      main: '#D9D9D9',
+      main: '#d9d9d9',
     },
+  }, 
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          color: "#FFFFFF",
+          "&:hover": {
+            color: "#FFFFFF", 
+          },
+          fontFamily: 'Noto Sans KR, Arial, sans-serif',
+        },
+        outlined: {
+          color: "#0fc499",
+          "&:hover": {
+            color: "#0fc499", 
+          }
+        },
+        contained: {
+          boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.1)',
+        },
+        text: {
+          color: "#0fc499",
+          "&:hover": {
+            color: "#0fc499", 
+          }
+        },
+      },
+    },
+    MuiTypography:{
+      styleOverrides: {
+        root: {
+          fontFamily: 'Noto Sans KR, Arial, sans-serif',
+        },
+      },
+    }
   },
 });
 
@@ -34,7 +71,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        {/* <AppProvider> */}
+          <RouterProvider router={router} />
+        {/* </AppProvider> */}
+      </AuthProvider >
     </ThemeProvider>
   </React.StrictMode>
 );
