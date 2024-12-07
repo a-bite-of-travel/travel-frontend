@@ -31,7 +31,7 @@ export default function MyPlan() {
 
             setLoading(true);
             try {
-                const response = await axiosInstance.get(`tour/myplan/${userId}`);
+                const response = await axiosInstance.get(`/tour/myplan/${userId}`);
                 if (response.status === 200) {
                     console.log("받은 데이터:", response.data);
                     setPlans(response.data.data); // API에서 반환된 데이터를 상태에 저장
