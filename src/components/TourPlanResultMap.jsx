@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
 import { ClipLoader } from "react-spinners";
 import { Button } from '@mui/material'
+import {useAuth} from '../context/AuthContext';
+import axiosInstance from '../utils/axiosInstance';
 
 export default function TourPlanResultMap({ data }) {
     const [selectedDay, setSelectedDay] = useState(0);
-
+    const { user } = useAuth(); // 로그인된 사용자 정보 가져오기
     const [selectedMarker, setSelectedMarker] = useState(null);
     const [expandedItem, setExpandedItem] = useState(null); // 현재 슬라이드가 열린 항목
     const [expandedData, setExpandedData] = useState(null); // 슬라이드에 표시할 데이터
@@ -51,9 +52,9 @@ export default function TourPlanResultMap({ data }) {
             setIsSlideOpen(true);
 
             // 새 데이터 로드
-            const url = `http://localhost:3500/tour/plan/detail?x=${location.mapx}&y=${location.mapy}&title=${encodeURIComponent(location.title)}`;
+            const url = `/tour/plan/detail?x=${location.mapx}&y=${location.mapy}&title=${encodeURIComponent(location.title)}`;
             try {
-                const response = await axios.get(url);
+                const response = await axiosInstance.get(url);
                 setExpandedData(response.data.data); // 데이터 저장
             } catch (error) {
                 console.error("Error fetching location details:", error);
@@ -96,12 +97,15 @@ export default function TourPlanResultMap({ data }) {
             contentid: data.result.map((day) =>
                 day.map((location) => (location.contentid))
             ),
-            title: data.title
+            title: data.title,
+            userId: user?.id,
+            summary: data.summary,
+            thumbnail: data.result[0].firstimage2 || null
         };
 
         try {
             // POST 요청을 보냅니다.
-            const response = await axios.post("http://localhost:3500/tour/plan", requestData);
+            const response = await axiosInstance.post("/tour/plan", requestData);
 
             if (response.status === 201) {
                 alert("여행이 성공적으로 저장되었습니다!");
@@ -129,12 +133,19 @@ export default function TourPlanResultMap({ data }) {
                 <h2 style={{ color: "#0fc499", textAlign: "center", marginBottom: "15px" }}>여행 코스</h2>
                 <div style={{display:'flex',justifyContent:"space-between",alignItems:'center'}}>
                     <p style={{color:'#333'}}>{data.title}</p>
-                    <div style={{textAlign:"right"}}>
-                        <Button onClick={handleSaveTour}  variant="contained"  sx={{ backgroundColor: 'secondary.main' }}>여행 저장</Button>
-                    </div>
+                    {user && (
+                        <div style={{textAlign: "right"}}>
+                            <Button onClick={handleSaveTour} variant="contained"
+                                    sx={{backgroundColor: 'secondary.main'}}>여행 저장</Button>
+                        </div>
+                    )}
                 </div>
                 {/* 여행 간단 요약 */}
-                <div style={{ marginTop: "15px", padding: "15px 20px 15px 20px", border: "1px solid #ccc", borderRadius: "5px", backgroundColor: "#fff" }}>
+                <div style={{
+                    marginTop: "15px",
+                    padding: "15px 20px 15px 20px",
+                    border: "1px solid #ccc",
+                    borderRadius: "5px", backgroundColor: "#fff" }}>
                     <h3 style={{ marginBottom: "10px" }}>여행 간단 요약</h3>
                     <p style={{ fontSize: "14px", lineHeight: "1.6", marginBottom: "10px" }}>
                         {showFullSummary || data.summary.length <= 150

@@ -1,7 +1,7 @@
 import React from "react";
 import SubTitle from "../components/SubTitle";
 import ReviewList from "../components/ReviewList";
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 import { useLoaderData } from "react-router-dom";
 
 export default function ReviewTour() {
@@ -18,7 +18,7 @@ export default function ReviewTour() {
 
 export async function loader() {
     try {
-        const response = await axios.get("http://localhost:3500/review");
+        const response = await axiosInstance.get("/review");
         if (response.status === 200) {
             return response.data.data.review; // 리뷰 데이터 반환
         } else {

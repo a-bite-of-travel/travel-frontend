@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Axios 기본 설정
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3500", // Express 서버 주소
+  baseURL: process.env.REACT_APP_BASE_URL, // Express 서버 주소
   withCredentials: true, // 인증 정보 포함
 });
 
