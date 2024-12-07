@@ -1,14 +1,19 @@
 import { Box, Button, Grid, List, ListItem, ListItemText, TextField, Container, Divider, Typography } from '@mui/material';
 import React from 'react';
-import axios from 'axios';
-import { useLoaderData } from 'react-router-dom';
+import axiosInstance from '../utils/axiosInstance';
+import { useNavigate, useLoaderData } from 'react-router-dom';
 
 export default function TourInfoDetail() {
     const detail = useLoaderData();
+    const navigate = useNavigate();
 
     // HTML 문자열을 렌더링하는 함수
     const renderHTML = (htmlString) => {
         return { __html: htmlString };
+    };
+
+    const handleBackToList = () => {
+        navigate('/tour');
     };
 
     return (
@@ -66,36 +71,9 @@ export default function TourInfoDetail() {
                             </div>
 
                             {/* "목록으로" 버튼 */}
-                            <Button variant="contained" color="primary">
+                            <Button variant="contained" color="primary" onClick={handleBackToList}>
                                 목록으로
                             </Button>
-                        </div>
-
-                        {/* 댓글 영역 */}
-                        <Divider sx={{ my: 3 }} />
-                        <div className="comment_area">
-                            <div className="comment_box">
-                                <Box sx={{ display: 'flex', gap: 1 }}>
-                                    <TextField
-                                        fullWidth
-                                        variant="outlined"
-                                        placeholder="댓글을 입력하세요"
-                                    />
-                                    <Button variant="contained" color="primary">
-                                        댓글<br />달기
-                                    </Button>
-                                </Box>
-                            </div>
-
-                            <List sx={{ mb: 2 }}>
-                                <ListItem sx={{ borderBottom: '1px solid #e0e0e0' }}>
-                                    <ListItemText secondary={`작성일: 22323`} />
-                                    <p>작성자 :</p>
-                                    <Button size="small" color="error">
-                                        삭제
-                                    </Button>
-                                </ListItem>
-                            </List>
                         </div>
                     </Grid>
                 </Grid>
@@ -106,6 +84,6 @@ export default function TourInfoDetail() {
 
 export async function loader({ request, params }) {
     const { contentid } = params;
-    const detail = await axios.get(`http://localhost:3500/tour/info/${contentid}?contenttypeid=12`);
+    const detail = await axiosInstance.get(`/tour/info/${contentid}?contenttypeid=12`);
     return detail.data.data;
 }

@@ -1,8 +1,6 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import {
     Container,
-    Grid,
     Typography,
     List,
     ListItem,
@@ -15,8 +13,9 @@ import {
     FormControlLabel,
     Checkbox
 } from '@mui/material';
-import { useLoaderData, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { useLoaderData, useNavigate, useSearchParams, useLocation  } from 'react-router-dom';
 import SubTitle from "../components/SubTitle";
+import axiosInstance from '../utils/axiosInstance';
 
 export default function TourInfoList() {
     const { tourCodeList, tourInfoList, totalCount } = useLoaderData();
@@ -86,7 +85,8 @@ export default function TourInfoList() {
 
     return (
         <div className="contents_wrap">
-            <SubTitle type="ty1" />
+            {location.pathname === '/tour' ? (<SubTitle type="ty1" />) : <SubTitle type="ty2" />}
+
             <Container maxWidth="lg">
                 <div className="list_wrap">
                     <div className='search_box'>
@@ -165,8 +165,6 @@ export default function TourInfoList() {
     );
 }
 
-
-// Loader with searchParams
 export async function loader({request, type}) {
     const url = new URL(request.url);
     const contenttypeid = type || '12';
@@ -182,8 +180,8 @@ export async function loader({request, type}) {
     }).toString();
 
     try {
-        const tourInfoList = await axios.get(`http://localhost:3500/tour/info?${query}`);
-        const tourCodeList = await axios.get(`http://localhost:3500/tour/code`);
+        const tourInfoList = await axiosInstance.get(`/tour/info?${query}`);
+        const tourCodeList = await axiosInstance.get(`/tour/code`);
 
         return {
             tourInfoList: tourInfoList.data.data.items,

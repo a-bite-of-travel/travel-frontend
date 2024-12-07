@@ -2,7 +2,7 @@ import { FormControl, Grid, Box, Typography } from '@mui/material';
 import { Form, useLoaderData, useActionData, useSubmit } from 'react-router-dom';
 import TourPlanResultMap from '../components/TourPlanResultMap';
 import TourPlanSelect from '../components/TourPlanSelect';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 import React, { useState } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
 
@@ -97,7 +97,7 @@ export default function Plan() {
 }
 
 export async function loader() {
-    const tourCodeList = await axios.get(`http://localhost:3500/tour/code`);
+    const tourCodeList = await axiosInstance.get(`/tour/code`);
     return {
         tourCodeList: tourCodeList.data.data,
     };
@@ -114,7 +114,7 @@ export async function action({ request }) {
     };
 
     try {
-        const response = await axios.post('http://localhost:3500/tour', requestBody);
+        const response = await axiosInstance.post('/tour', requestBody);
         return response.data.data;
     } catch (error) {
         console.error('Error:', error);

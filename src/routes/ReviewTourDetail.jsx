@@ -1,7 +1,7 @@
 import {Box, Button, Grid, List, ListItem, ListItemText, TextField, Container} from '@mui/material';
 import React, { useState } from 'react';
 import axiosInstance from '../utils/axiosInstance';
-import {useLoaderData, useSubmit, redirect  } from 'react-router-dom';
+import {useLoaderData, useSubmit, redirect, useNavigate, useLocation  } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import {useAuth} from '../context/AuthContext';
 
@@ -10,6 +10,9 @@ export default function ReviewTourDetail(){
     const { user } = useAuth(); // 로그인된 사용자 정보 가져오기
     const submit = useSubmit(); // React Router's useSubmit
     const [newComment, setNewComment] = useState(""); // 댓글 내용 상태 관리
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from || '/review'; // 기본값 설정
 
     let isAuthor;
     if(user) {
@@ -44,8 +47,6 @@ export default function ReviewTourDetail(){
                 return '여행지';
             case 'ty2':
                 return '음식점';
-            case 'ty3':
-                return '축제';
             default:
                 return '알 수 없음';
         }
@@ -77,7 +78,7 @@ export default function ReviewTourDetail(){
     };
 
     const handleBackToList = () => {
-        // setSelectedReview(null); // 선택된 리뷰 초기화
+        navigate(from);
     };
 
     // 댓글 추가

@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { Container, FormControl, FormLabel, Select, MenuItem, TextField, Button } from "@mui/material";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { useNavigate } from "react-router-dom"; // useNavigate 추가
 import axiosInstance from "../utils/axiosInstance";
 
 export default function Writing() {
@@ -12,7 +13,7 @@ export default function Writing() {
     const [tags, setTags] = useState("");
     const [errors, setErrors] = useState({});
     const quillRef = useRef(null);
-
+    const navigate = useNavigate(); // useNavigate 훅 사용
 
     /* Handlers */
     const handleSubmit = async (event) => {
@@ -35,8 +36,6 @@ export default function Writing() {
             tags: tags.split(",").map(tag => tag.trim()),  //태그 배열로 변환
         };
 
-        console.log("Submitted Data:", reviewData);
-
         try {
             // API 호출
             const response = await axiosInstance.post("/review", reviewData);
@@ -48,6 +47,7 @@ export default function Writing() {
                 setContent("");
                 setTags("");
                 setErrors({});
+                navigate("/review"); // 제출 완료 후 /review 경로로 이동
             } else {
                 alert(`리뷰 제출에 실패했습니다. 상태 코드: ${response.status}`);
             }
@@ -68,7 +68,7 @@ export default function Writing() {
                 [{ header: [1, 2, false] }],
                 ["bold", "italic", "underline"],
                 [{ list: "ordered" }, { list: "bullet" }],
-                ["link", "image"], 
+                ["link", "image"],
             ],
         },
     };
@@ -82,7 +82,7 @@ export default function Writing() {
         "bullet",
         "link",
         "image",
-    ]
+    ];
 
     return (
         <Container maxWidth="lg">
@@ -98,7 +98,6 @@ export default function Writing() {
                     >
                         <MenuItem value="ty1">여행지</MenuItem>
                         <MenuItem value="ty2">음식점</MenuItem>
-                        <MenuItem value="ty3">축제</MenuItem>
                     </Select>
                 </FormControl>
 
