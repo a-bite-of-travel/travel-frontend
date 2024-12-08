@@ -73,7 +73,7 @@ export default function Mypage() {
                     <Grid container alignItems="center" spacing={4} className="top">
                         <Grid item>
                             <Avatar
-                                src={profileImage ? `http://localhost:3500${profileImage}` : "/images/profile_default.png"}
+                                src={profileImage ? `${process.env.REACT_APP_BASE_URL}${profileImage}` : "/images/profile_default.png"}
                                 alt={user?.nickName}
                                 sx={{ width: 100, height: 100 }}
                             />

@@ -79,7 +79,7 @@ export default function Header() {
                             <Stack direction="row" sx={{ alignItems: 'center' }} justifyContent="flex-end">
                                 <Link color="inherit" underline="none" to={`/${user?.id}`} component={RouterLink} sx={{ '&:hover': { color: 'primary.main' }, display: 'flex', alignItems: 'center' }}>
                                     <Avatar
-                                        src={profileImage ? `http://localhost:3500${profileImage}` : "/images/profile_default.png"} 
+                                        src={profileImage ? `${process.env.REACT_APP_BASE_URL}${profileImage}` : "/images/profile_default.png"}
                                         alt={user?.email || "닉네임"}
                                     />
                                     <Typography variant="body1" sx={{ marginLeft: '10px' }}>
