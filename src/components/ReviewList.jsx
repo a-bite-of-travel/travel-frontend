@@ -29,6 +29,12 @@ export default function ReviewList({ reviews }) {
         navigate('/review/create'); // 리뷰 작성 페이지로 이동
     };
 
+    const stripHtmlAndTruncate = (html, maxLength = 500) => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+        const textContent = tempDiv.textContent || tempDiv.innerText || '';
+        return textContent.length > maxLength ? textContent.slice(0, maxLength) + '...' : textContent;
+    };
 
     return (
         <Container maxWidth="lg">
@@ -52,9 +58,13 @@ export default function ReviewList({ reviews }) {
                                         </Typography>
                                     }
                                     secondary={
-                                        <Typography variant="body2" color="textSecondary">
-                                            {reviews[0]?.content}
-                                        </Typography>
+                                        <Typography
+                                            variant="body2"
+                                            color="textSecondary"
+                                            dangerouslySetInnerHTML={{
+                                                __html: stripHtmlAndTruncate(reviews[0]?.content),
+                                            }}
+                                        />
                                     }
                                 />
                             </ListItem>

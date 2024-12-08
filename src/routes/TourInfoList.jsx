@@ -143,7 +143,7 @@ export default function TourInfoList() {
                                     primary={<Typography variant="h6">{info.title}</Typography>}
                                     secondary={
                                         <Typography variant="body2" color="textSecondary" noWrap>
-                                            {info.description || '설명이 없습니다.'}
+                                            {info.region} | {info.theme}
                                         </Typography>
                                     }
                                 />
