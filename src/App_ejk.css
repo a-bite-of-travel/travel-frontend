@@ -90,7 +90,7 @@
 
 
 .tour_box_wrap{display:block !important;overflow:hidden;}
-.tour_box_wrap .tour_box{float:left;width: calc(25% - 10px) !important;float:left !important}
+.tour_box_wrap .tour_box{float:left;width:25% !important;float:left !important}
 .tour_box .li{display: block;background: #fff;padding: 16px;border-radius: 8px;box-shadow: 1px 5px 10px rgba(0, 0, 0, 0.1);}
 .tour_box .li .img_box{width: 100%;height: 150px;border-radius: 4px;}
 .tour_box .li .img_normal{width: 100%;height: 150px;border-radius: 4px;background: url('../public/images/img_normal.png');background-size: cover;}
