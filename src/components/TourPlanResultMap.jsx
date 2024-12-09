@@ -132,7 +132,7 @@ export default function TourPlanResultMap({ data }) {
             >
                 <h2 style={{ color: "#0fc499", textAlign: "center", marginBottom: "15px" }}>여행 코스</h2>
                 <div style={{display:'flex',justifyContent:"space-between",alignItems:'center'}}>
-                    <p style={{color:'#333'}}>{data.title}</p>
+                    <h3 style={{color:'#333'}}>{data.title}</h3>
                     {user && (
                         <div style={{textAlign: "right"}}>
                             <Button onClick={handleSaveTour} variant="contained"
@@ -146,7 +146,7 @@ export default function TourPlanResultMap({ data }) {
                     padding: "15px 20px 15px 20px",
                     border: "1px solid #ccc",
                     borderRadius: "5px", backgroundColor: "#fff" }}>
-                    <h3 style={{ marginBottom: "10px" }}>여행 간단 요약</h3>
+                    <h3 style={{ marginBottom: "10px",fontWeight:'normal' }}>여행 간단 요약</h3>
                     <p style={{ fontSize: "14px", lineHeight: "1.6", marginBottom: "10px" }}>
                         {showFullSummary || data.summary.length <= 150
                             ? data.summary
