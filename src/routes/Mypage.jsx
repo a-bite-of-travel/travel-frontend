@@ -90,8 +90,8 @@ export default function Mypage() {
                 </Container>
             </Container>
 
-            <Container maxWidth="lg">
-                <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: 4 }}>
+            <Container maxWidth="lg" id="container" className="ty2">
+                <Box sx={{ borderBottom: 1, borderColor: 'divider',}}>
                     <Tabs value={activeTab} onChange={handleTabChange} aria-label="mypage tabs">
                         <Tab label="내가 작성한 리뷰 목록" />
                         <Tab label="나의 여행 일정 목록" />

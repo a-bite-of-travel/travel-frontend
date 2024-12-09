@@ -23,7 +23,7 @@ export default function MyPlanDetail() {
                             {/* 제목 */}
                             <h4 className='tit_h4'>{title}</h4>
 
-                            <Grid container spacing={3} justifyContent="center">
+                            <Grid spacing={3} justifyContent="center">
                                 {days &&
                                     days.map((dayObj, index) => {
                                         const dayKey = Object.keys(dayObj)[0]; // 예: 'day1'
@@ -38,10 +38,10 @@ export default function MyPlanDetail() {
                                                 <Divider sx={{ marginBottom: 3 }} />
 
                                                 {/* Day 데이터 렌더링 */}
-                                                <Grid container spacing={3}>
+                                                <Grid container spacing={3} className='tour_box_wrap'>
                                                     {Array.isArray(dayData) &&
                                                         dayData.map((item, idx) => (
-                                                            <Grid item xs={12} key={idx}>
+                                                            <Grid item xs={12} key={idx}  className="tour_box">
                                                                 <Card
                                                                     sx={{
                                                                         display: 'flex',
@@ -52,6 +52,7 @@ export default function MyPlanDetail() {
                                                                         margin: '0 auto',
                                                                         padding: 2,
                                                                     }}
+                                                                      className="li"
                                                                 >
                                                                     {item.firstimage2 ? (
                                                                         <CardMedia
@@ -65,6 +66,7 @@ export default function MyPlanDetail() {
                                                                             }}
                                                                             image={item.firstimage2}
                                                                             alt={item.title}
+                                                                            className='img_box'
                                                                         />
                                                                     ): (
                                                                         <CardMedia
@@ -77,6 +79,7 @@ export default function MyPlanDetail() {
                                                                                 marginRight: 2,
                                                                             }}
                                                                             image='/images/img_normal.png'
+                                                                            className='img_box'
                                                                         />
                                                                     )}
                                                                     <CardContent
