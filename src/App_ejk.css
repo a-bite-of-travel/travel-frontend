@@ -94,7 +94,7 @@
 .tour_box .li{display: block;background: #fff;padding: 16px;border-radius: 8px;box-shadow: 1px 5px 10px rgba(0, 0, 0, 0.1);}
 .tour_box .li .img_box{width: 100%;height: 150px;border-radius: 4px;}
 .tour_box .li .img_normal{width: 100%;height: 150px;border-radius: 4px;background: url('../public/images/img_normal.png');background-size: cover;}
-.tour_box .li h6{font-size: 18px;margin-bottom: 10px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+.tour_box .li h6{font-size: 18px;margin-bottom: 10px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;}
 .tour_box .li h6 + p{color: #888;min-height:46px;margin-bottom:-15px}
 
 
